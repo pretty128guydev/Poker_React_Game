@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import Player_PositionArray from "../../utils/Player_PositionArray.json"
+import { playerPosition } from "../../utils/PlayerPositionArray";
 import Badge from "./Badge/Badge";
-import { HiOutlinePlusCircle } from "react-icons/hi"
+import { HiOutlinePlusCircle } from "react-icons/hi";
 import { IoMenuSharp } from "react-icons/io5";
 import { CiCalendar } from "react-icons/ci";
 import { FaRegUserCircle } from "react-icons/fa";
 import PokerActionPanel from "../Footer";
 import PokerLog from "../PokerLog";
+import InfiniteProgressBar from "./AutoProgressBar/AutoProgressBar";
 
 //* Define the interface for the position object
 interface PositionArray {
@@ -27,10 +28,10 @@ function PlayPage() {
         //* set the number of players
         switch (selectedValue) {
             case "6":
-                setPositionArray(Player_PositionArray.six);
+                setPositionArray(playerPosition.six);
                 break;
             case "9":
-                setPositionArray(Player_PositionArray.nine);
+                setPositionArray(playerPosition.nine);
                 break;
             default:
                 setPositionArray([]);
@@ -39,13 +40,12 @@ function PlayPage() {
 
     //* Get Randome Card
     function getRandomCard() {
-        const ranks = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
-        const suits = ['A', 'B', 'C', 'D']; // Suits can be interpreted as Spades, Hearts, Clubs, Diamonds
+        const ranks = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+        const suits = ["A", "B", "C", "D"]; // Suits can be interpreted as Spades, Hearts, Clubs, Diamonds
         const randomRank = ranks[Math.floor(Math.random() * ranks.length)];
         const randomSuit = suits[Math.floor(Math.random() * suits.length)];
         return randomRank + randomSuit;
     }
-
 
     return (
         <div className="h-screen">
@@ -89,18 +89,18 @@ function PlayPage() {
                     <div className="flex-grow scrollbar-none bg-custom-table h-[75%] flex flex-col justify-center items-center relative pt-10 z-0">
                         <div className="h-[50%] w-[85%] mt-[-10vh] relative text-center block z-[-2] transform translate-y-[30px]">
                             <div className="h-full">
-                                <div className="flex absolute w-[50%] h-[70%] left-1/2 top-5 transform -translate-x-1/2 text-center z-0 border-[2px] border-[#c9c9c985] rounded-full flex items-center justify-center shadow-[0_7px_13px_rgba(0,0,0,0.3)]">
+                                <div className="flex absolute gap-2 w-[40%] h-[70%] left-1/2 top-5 transform -translate-x-1/2 text-center z-0 border-[2px] border-[#c9c9c985] rounded-full flex items-center justify-center shadow-[0_7px_13px_rgba(0,0,0,0.3)]">
                                     {/* {//TODO: TABLE} */}
-                                    <img src={`/cards/${getRandomCard()}.svg`} className="w-[70px] h-[65px] mr-[-10px]" />
-                                    <img src={`/cards/${getRandomCard()}.svg`} className="w-[70px] h-[65px] mr-[-10px]" />
-                                    <img src={`/cards/${getRandomCard()}.svg`} className="w-[70px] h-[65px]" />
-                                    <div className="w-[45px] h-[65px] aspect-square border-[0.5px] border-dashed border-white rounded-[5px] mr-[10px]"></div>
-                                    <div className="w-[45px] h-[65px] aspect-square border-[0.5px] border-dashed border-white rounded-[5px] mr-[10px]"></div>
+                                    <img src={`/cards/${getRandomCard()}.svg`} className="w-[55px] h-[auto]" />
+                                    <img src={`/cards/${getRandomCard()}.svg`} className="w-[55px] h-[auto]" />
+                                    <img src={`/cards/${getRandomCard()}.svg`} className="w-[55px] h-[auto]" />
+                                    <div className="w-[55px] h-[76px] aspect-square border-[0.5px] border-dashed border-white rounded-[5px]"></div>
+                                    <div className="w-[55px] h-[76px] aspect-square border-[0.5px] border-dashed border-white rounded-[5px]"></div>
                                 </div>
                             </div>
                             {positionArray.map((position, index) => (
                                 <>
-                                    {index == 2 || index == 4 ?
+                                    {index == 2 || index == 4 ? (
                                         //! Vacant
                                         <div
                                             key={index}
@@ -113,29 +113,43 @@ function PlayPage() {
                                             <div className="flex justify-center gap-4 mb-2">
                                                 <FaRegUserCircle color="#f0f0f0" className="w-10 h-10" />
                                             </div>
-                                            <div className="text-white">
-                                                Vacant Seat
+                                            <div className="text-white">Vacant Seat</div>
+                                        </div>
+                                    ) : index != 0 ? (
+                                        //!Back Card
+                                        <div
+                                            key={index}
+                                            className="absolute flex flex-col justify-center text-gray-600 w-[150px] h-[140px] mt-[40px] transform -translate-x-1/2 -translate-y-1/2"
+                                            style={{
+                                                left: position.left,
+                                                top: position.top
+                                            }}
+                                        >
+                                            <div className="flex justify-center gap-1">
+                                                <img src={`/cards/Back.svg`} className="w-[35%] h-[auto]" />
+                                                <img src={`/cards/Back.svg`} className="w-[35%] h-[auto]" />
                                             </div>
-                                        </div> :
-                                        index != 0 ?
-                                            //!Back Card
-                                            <div
-                                                key={index}
-                                                className="absolute flex flex-col justify-center text-gray-600 w-[150px] h-[140px] mt-[40px] transform -translate-x-1/2 -translate-y-1/2"
-                                                style={{
-                                                    left: position.left,
-                                                    top: position.top
-                                                }}
-                                            >
-                                                <div className="flex justify-center mb-2">
-                                                    <img src={`/cards/Back.svg`} className="w-[35%] h-[auto] mr-[-10px]" />
-                                                    <img src={`/cards/Back.svg`} className="w-[35%] h-[auto] mr-[10px]" />
+                                            <div className="relative flex flex-col justify-end mt-[-6px] mx-1">
+                                                <div className="b-[0%] mt-[auto] w-full h-[50px] bg-red-500 shadow-[1px_2px_6px_2px_rgba(0,0,0,0.3)] rounded-tl-2xl rounded-tr-2xl rounded-bl-xl rounded-br-xl shadow-md flex flex-col">
+                                                    {/* <p className="text-white font-bold text-sm mt-auto mb-1.5 self-center">+100</p> */}
+                                                    <InfiniteProgressBar />
                                                 </div>
-                                                <div>
+                                                <div className="absolute top-[0%] w-full">
                                                     <Badge count={9} value={index * 100} />
                                                 </div>
-                                            </div> :
-                                            //! Mine
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        //! Mine
+                                        <>
+                                            <img
+                                                src="/cards/PlayerAnimation.svg"
+                                                className="absolute mt-[20px] transform -translate-x-1/2 -translate-y-1/2"
+                                                style={{
+                                                    left: position.left,
+                                                    top: position.top
+                                                }}
+                                            />
                                             <div
                                                 key={index}
                                                 className="absolute flex flex-col justify-center text-gray-600 w-[150px] h-[140px] mt-[40px] transform -translate-x-1/2 -translate-y-1/2"
@@ -144,15 +158,22 @@ function PlayPage() {
                                                     top: position.top
                                                 }}
                                             >
-                                                <div className="flex justify-center mb-2">
-                                                    <img src={`/cards/${getRandomCard()}.svg`} className="w-[35%] h-[auto] mr-[-10px]" />
-                                                    <img src={`/cards/${getRandomCard()}.svg`} className="w-[35%] h-[auto] mr-[10px]" />
+                                                <div className="flex justify-center gap-1">
+                                                    <img src={`/cards/${getRandomCard()}.svg`} className="w-[35%] h-[auto]" />
+                                                    <img src={`/cards/${getRandomCard()}.svg`} className="w-[35%] h-[auto]" />
                                                 </div>
-                                                <div>
-                                                    <Badge count={9} value={40} />
+                                                <div className="relative flex flex-col justify-end mt-[-6px] mx-1s">
+                                                    <div className="b-[0%] mt-[auto] w-full h-[50px] bg-red-500  shadow-[1px_2px_6px_2px_rgba(0,0,0,0.3)] rounded-tl-2xl rounded-tr-2xl rounded-bl-xl rounded-br-xl shadow-md flex flex-col">
+                                                        {/* <p className="text-white font-bold text-sm mt-auto mb-1.5 self-center">+100</p> */}
+                                                        <InfiniteProgressBar />
+                                                    </div>
+                                                    <div className="absolute top-[0%] w-full">
+                                                        <Badge count={9} value={128} />
+                                                    </div>
                                                 </div>
                                             </div>
-                                    }
+                                        </>
+                                    )}
                                 </>
                             ))}
                         </div>
