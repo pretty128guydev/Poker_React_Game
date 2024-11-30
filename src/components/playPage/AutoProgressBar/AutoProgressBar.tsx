@@ -16,8 +16,8 @@ const InfiniteProgressBar: React.FC = () => {
     return (
         <div className="flex items-center w-full h-2 mb-2 mt-auto gap-2">
             {/* Progress number */}
-            <span className="ml-2 text-white text-sm w-[15px]">{31 - progress}</span>
-            <div className="relative left-[15px] flex-1 h-full w-[calc(100%-15px)] bg-red-500 rounded-md overflow-hidden">
+            <span className="ml-2 text-white text-sm w-[15px]">{30 - progress}</span>
+            <div className="relative flex-1 mr-[10px] h-full w-[calc(100%-25px)] bg-[#f0f0f030] rounded-md overflow-hidden">
                 {/* Progress bar */}
                 <div
                     className="absolute top-0 left-0 h-full w-full bg-white"

@@ -1,0 +1,21 @@
+import React from "react";
+
+type DealerProps = {
+    top?: string; // Back side image source
+    left?: string;
+};
+
+const Dealer: React.FC<DealerProps> = ({ left, top }) => {
+    return (
+        <div
+            style={{ top: top, left: left }}
+            className="absolute z-[110] rounded-full p-[2px] shadow-[0_1px_1px_rgba(0,0,0,0.25)] bg-gradient-to-br from-[#FAFAFA] to-[#B8B8B8] w-[25px] h-[25px]"
+        >
+            <div className="flex items-center justify-center bg-gradient-to-t from-[#FAFAFA] to-[#B8B8B8] rounded-full h-full w-full">
+                <img src={`/cards/dealer.svg`} className="absolute w-[15px] h-[auto]" />
+            </div>
+        </div>
+    );
+};
+
+export default Dealer;

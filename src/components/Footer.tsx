@@ -8,7 +8,7 @@ const PokerActionPanel: React.FC = () => {
     };
 
     return (
-        <div className="p-6 rounded-lg w-[600px] h-full text-white space-y-6">
+        <div className="flex flex-col justify-center rounded-lg w-[600px] h-full text-white space-y-6 mb-2">
             {/* Action Buttons */}
             <div className="flex justify-between gap-2">
                 <button className="bg-[#0c0c0c80] hover:bg-[#0c0c0c] px-4 py-2 rounded-lg w-full border-[1px] border-gray-400">FOLD</button>
