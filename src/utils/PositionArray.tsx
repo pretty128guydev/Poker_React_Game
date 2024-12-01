@@ -32,12 +32,12 @@ export const playerPosition = {
             color: "#4ade80"
         }, //* 1 green
         {
-            left: "-100px",
+            left: "-120px",
             top: "230px",
             color: "#ef4444"
         }, //* 2 red
         {
-            left: "-100px",
+            left: "-120px",
             top: "30px",
             color: "#3b82f6"
         }, //* 3 blue
@@ -52,12 +52,12 @@ export const playerPosition = {
             color: "#212529"
         }, //* 5 black
         {
-            left: "910px",
+            left: "930px",
             top: "30px",
             color: "#FFD700"
         }, //* 6 yellow
         {
-            left: "910px",
+            left: "930px",
             top: "230px",
             color: "#ec4899"
         }, //* 7 pink
@@ -103,40 +103,49 @@ export const chipPosition = {
     ],
     nine: [
         {
-            bottom: "-13px",
-            left: "140px"
+            // 1
+            bottom: "-20px",
+            left: "110px"
         },
         {
-            bottom: "210px",
-            left: "10px"
-        },
-        {
+            // 2
             bottom: "60px",
-            left: "10px"
+            left: "-15px"
         },
         {
-            bottom: "285px",
-            left: "185px"
-        },
-        {
-            bottom: "285px",
-            left: "585px"
-        },
-        {
+            // 3
             bottom: "210px",
-            left: "770px"
+            left: "-5px"
         },
         {
+            // 4
+            bottom: "280px",
+            left: "165px"
+        },
+        {
+            // 5
+            bottom: "280px",
+            left: "565px"
+        },
+        {
+            // 6
+            bottom: "210px",
+            left: "740px"
+        },
+        {
+            // 7
             bottom: "60px",
-            left: "770px"
+            left: "745px"
         },
         {
-            bottom: "-13px",
-            left: "640px"
+            // 8
+            bottom: "-20px",
+            left: "610px"
         },
         {
-            bottom: "-13px",
-            left: "390px"
+            // 9
+            bottom: "-20px",
+            left: "350px"
         }
     ]
 };
@@ -170,38 +179,47 @@ export const dealerPosition = {
     ],
     nine: [
         {
+            // 1
             left: "215px",
             top: "340px"
         },
         {
-            left: "-20px",
-            top: "250px"
-        },
-        {
-            left: "-20px",
-            top: "80px"
-        },
-        {
-            left: "280px",
-            top: "-20px"
-        },
-        {
-            left: "495px",
-            top: "-20px"
-        },
-        {
-            left: "800px",
-            top: "80px"
-        },
-        {
-            left: "805px",
+            // 2
+            left: "-35px",
             top: "255px"
         },
         {
+            // 3
+            left: "-35px",
+            top: "80px"
+        },
+        {
+            // 4
+            left: "280px",
+            top: "-15px"
+        },
+        {
+            // 5
+            left: "495px",
+            top: "-15px"
+        },
+        {
+            // 6
+            left: "825px",
+            top: "80px"
+        },
+        {
+            // 7
+            left: "825px",
+            top: "255px"
+        },
+        {
+            // 8
             left: "560px",
             top: "340px"
         },
         {
+            // 9
             left: "310px",
             top: "340px"
         }

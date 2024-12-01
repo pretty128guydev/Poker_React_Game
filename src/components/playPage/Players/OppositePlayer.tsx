@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { FaRegUserCircle } from "react-icons/fa";
+import React from "react";
 import Badge from "../Badge/Badge";
+import ProgressBar from "../AutoProgressBar/AutoProgressBar";
 
 type OppositePlayerProps = {
     left?: string; // Front side image source
     top?: string; // Back side image source
     index: number;
+    currentIndex: number;
     color?: string;
+    choice?: string;
 };
 
-const OppositePlayer: React.FC<OppositePlayerProps> = ({ left, top, index, color }) => {
+const OppositePlayer: React.FC<OppositePlayerProps> = ({ left, top, index, color, currentIndex, choice }) => {
     return (
         <div
             key={index}
@@ -28,7 +30,7 @@ const OppositePlayer: React.FC<OppositePlayerProps> = ({ left, top, index, color
                     style={{ backgroundColor: color }}
                     className={`b-[0%] mt-[auto] w-full h-[55px] shadow-[1px_2px_6px_2px_rgba(0,0,0,0.3)] rounded-tl-2xl rounded-tr-2xl rounded-bl-md rounded-br-md shadow-md flex flex-col`}
                 >
-                    {/* <InfiniteProgressBar /> */}
+                    <ProgressBar index={index} />
                 </div>
                 <div className="absolute top-[0%] w-full">
                     <Badge count={index + 1} value={index * 100} color={color} />

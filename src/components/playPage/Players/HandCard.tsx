@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import "./Card.css";
+import "./HandCard.css";
 
-type CardProps = {
+type HandCardProps = {
     frontSrc: string; // Front side image source
     backSrc: string; // Back side image source
 };
 
-const Card: React.FC<CardProps> = ({ frontSrc, backSrc }) => {
+const HandCard: React.FC<HandCardProps> = ({ frontSrc, backSrc }) => {
     const [flipped, setFlipped] = useState(false);
 
     //!Clickable
@@ -25,13 +25,13 @@ const Card: React.FC<CardProps> = ({ frontSrc, backSrc }) => {
 
     return (
         // !Clickable
-        <div className={`card ${flipped ? "" : "flipped"}`} onClick={handleClick}>
+        <div className={`handcard ${flipped ? "" : "flipped"}`} onClick={handleClick}>
             {/* <div className={`card ${flipped ? "" : "flipped"}`}> */}
-            <div className="card-inner">
-                <div className="card-front">
+            <div className="handcard-inner">
+                <div className="handcard-front">
                     <img src={frontSrc} alt="Card Front" />
                 </div>
-                <div className="card-back">
+                <div className="handcard-back">
                     <img src={backSrc} alt="Card Back" />
                 </div>
             </div>
@@ -39,4 +39,4 @@ const Card: React.FC<CardProps> = ({ frontSrc, backSrc }) => {
     );
 };
 
-export default Card;
+export default HandCard;

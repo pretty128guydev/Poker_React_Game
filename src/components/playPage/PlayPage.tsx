@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { playerPosition, chipPosition, dealerPosition } from "../../utils/PositionArray";
 import { HiOutlinePlusCircle } from "react-icons/hi";
 import { IoMenuSharp } from "react-icons/io5";
@@ -12,6 +12,8 @@ import Player from "./Players/Player";
 import Dealer from "./Dealer/Dealer";
 import Chip from "./Chip/Chip";
 import PlaceAnimation from "./PlaceAnimation/PlaceAnimation";
+import { PlayerContext } from "../../context/PlayerContext";
+import { usePlayerContext } from "../../context/usePlayerContext";
 
 //* Define the interface for the position object
 interface PositionArray {
@@ -32,10 +34,49 @@ const calculateZoom = () => {
 
 function PlayPage() {
     const [selectedValue, setSelectedValue] = useState<number | string>("9");
+    const [currentDealer, setCurrentDealer] = useState<number>(0);
+    const [currentIndex, setCurrentIndex] = useState<number>(1);
+    const [currentChip, setCurrentChip] = useState<number>(0);
     const [playerPositionArray, setPlayerPositionArray] = useState<PositionArray[]>([]);
     const [chipPositionArray, setChipPositionArray] = useState<PositionArray[]>([]);
     const [dealerPositionArray, setDealerPositionArray] = useState<PositionArray[]>([]);
     const [zoom, setZoom] = useState(calculateZoom());
+
+    const { players, updatePlayer, currentDealerIndex } = usePlayerContext();
+    const playerChoices = players.map(player => player.choice);
+
+    const start = () => {
+        if (players[2].balance !== 0) {
+            updatePlayer(2, { ...players[2], balance: 0 });
+        }
+        if (players[4].balance !== 0) {
+            updatePlayer(4, { ...players[4], balance: 0 });
+        }
+        console.log(players);
+    };
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setCurrentIndex(prevIndex => {
+                if (prevIndex === 2) {
+                    // Handle case where prevIndex is 2 (e.g., no change or custom logic)
+                    return prevIndex + 2; // For example, keep it the same
+                } else if (prevIndex === 4) {
+                    // If prevIndex is 4, increment by 2
+                    return prevIndex + 2;
+                } else if (prevIndex === 9) {
+                    // If prevIndex is 4, increment by 2
+                    return prevIndex - 8;
+                } else {
+                    // Otherwise, just increment by 1
+                    return prevIndex + 1;
+                }
+            });
+        }, 30000);
+
+        // Cleanup the timer on component unmount
+        return () => clearTimeout(timer);
+    }, [currentIndex]);
 
     useEffect(() => {
         const handleResize = () => setZoom(calculateZoom());
@@ -116,45 +157,103 @@ function PlayPage() {
                             <div className="flex-grow scrollbar-none bg-custom-table h-full flex flex-col justify-center items-center relative z-0">
                                 <div className="w-[800px] h-[400px] relative text-center block z-[-2] transform translate-y-[30px]">
                                     <div className="h-full flex align-center justify-center">
-                                        <div className="relative flex absolute w-[800px] h-[300px] left-1/2 top-5 transform -translate-x-1/2 text-center z-0 border-[2px] border-[#c9c9c985] rounded-full flex items-center justify-center shadow-[0_7px_13px_rgba(0,0,0,0.3)]">
-                                            <div className="flex gap-2 mt-10">
-                                                <div className="card animate-fall delay-400">
+                                        <div className="relative flex flex-col absolute w-[800px] h-[300px] left-1/2 top-5 transform -translate-x-1/2 text-center z-0 border-[2px] border-[#c9c9c985] rounded-full flex items-center justify-center shadow-[0_7px_13px_rgba(0,0,0,0.3)]">
+                                            {/* //! Table */}
+                                            <div className="w-[140px] h-[25px] rounded-full bg-[#00000054] flex align-center justify-center">
+                                                <span className="text-[#dbd3d3] mr-2" onClick={start}>
+                                                    Total Pot: 50
+                                                </span>
+                                            </div>
+                                            <div className="w-[130px] h-[21px] rounded-full bg-[#00000054] flex align-center justify-center mt-2">
+                                                <span className="text-[#dbd3d3] mr-2">Main Pot: 10</span>
+                                            </div>
+                                            <div className="flex gap-2 mt-8">
+                                                <div className="card animate-fall delay-200">
                                                     <Card frontSrc={`/cards/${getRandomCard()}.svg`} backSrc="/cards/back.svg" />
                                                 </div>
                                                 <div className="card animate-fall delay-400">
                                                     <Card frontSrc={`/cards/${getRandomCard()}.svg`} backSrc="/cards/back.svg" />
                                                 </div>
-                                                <div className="card animate-fall delay-400">
+                                                <div className="card animate-fall delay-600">
                                                     <Card frontSrc={`/cards/${getRandomCard()}.svg`} backSrc="/cards/back.svg" />
                                                 </div>
                                                 <div className="w-[100px] h-[137px] aspect-square border-[0.5px] border-dashed border-white rounded-[5px]"></div>
                                                 <div className="w-[100px] h-[137px] aspect-square border-[0.5px] border-dashed border-white rounded-[5px]"></div>
                                             </div>
                                             {/* //! Chip */}
-                                            {chipPositionArray.map((position, index) => index == 0 && <Chip left={position.left} bottom={position.bottom} />)}
+                                            <div
+                                                style={{
+                                                    left: chipPositionArray[currentDealer]?.left,
+                                                    bottom: chipPositionArray[currentDealer]?.bottom,
+                                                    transition: "bottom 1s ease, left 1s ease"
+                                                }}
+                                                className="absolute"
+                                            >
+                                                <Chip amount={100} />
+                                            </div>
+                                            <div
+                                                style={{
+                                                    left: chipPositionArray[currentDealer + 3]?.left,
+                                                    bottom: chipPositionArray[currentDealer + 3]?.bottom,
+                                                    transition: "bottom 1s ease, left 1s ease"
+                                                }}
+                                                className="absolute"
+                                            >
+                                                <Chip amount={28} />
+                                            </div>
+                                            <div
+                                                style={{
+                                                    left: chipPositionArray[currentDealer + 1]?.left,
+                                                    bottom: chipPositionArray[currentDealer + 1]?.bottom,
+                                                    transition: "bottom 1s ease, left 1s ease"
+                                                }}
+                                                className="absolute"
+                                            >
+                                                <Chip amount={10} />
+                                            </div>
                                         </div>
                                     </div>
                                     {playerPositionArray.map((position, index) => (
                                         <>
-                                            {index == 2 ? (
-                                                // ! Vacant
-                                                <VacantPlayer index={index} left={position.left} top={position.top} />
-                                            ) : index != 0 ? (
-                                                //!Back Card
-                                                <OppositePlayer index={index} left={position.left} top={position.top} color={position.color} />
+                                            {index == 2 || index == 4 ? (
+                                                <VacantPlayer key={`vacant-${index}-${position.left}`} index={index} left={position.left} top={position.top} />
+                                            ) : index != 8 ? (
+                                                <OppositePlayer
+                                                    key={`opposite-${index}-${position.color}`}
+                                                    index={index}
+                                                    currentIndex={currentIndex}
+                                                    left={position.left}
+                                                    top={position.top}
+                                                    color={position.color}
+                                                    choice={playerChoices[index]}
+                                                />
                                             ) : (
-                                                //! Mine
-                                                <>
-                                                    <PlaceAnimation left={position.left} top={position.top} />
-                                                    <Player index={index} left={position.left} top={position.top} color={position.color} />
-                                                    {/* //! Dealer */}
-                                                    {dealerPositionArray.map(
-                                                        (position, index) => index == 0 && <Dealer left={position.left} top={position.top} />
-                                                    )}
-                                                </>
+                                                <Player
+                                                    key={`mine-${index}-${playerChoices[index]}`}
+                                                    index={index}
+                                                    currentIndex={currentIndex}
+                                                    left={position.left}
+                                                    top={position.top}
+                                                    color={position.color}
+                                                    choice={playerChoices[index]}
+                                                />
                                             )}
+                                            <div key={`animation-${index}`}>
+                                                <PlaceAnimation left={position.left} top={position.top} index={index} />
+                                            </div>
                                         </>
                                     ))}
+                                    {/*//! Dealer */}
+                                    <div
+                                        style={{
+                                            top: dealerPositionArray[currentDealerIndex]?.top,
+                                            left: dealerPositionArray[currentDealerIndex]?.left,
+                                            transition: "top 1s ease, left 1s ease"
+                                        }}
+                                        className="absolute"
+                                    >
+                                        <Dealer />
+                                    </div>
                                 </div>
                             </div>
                         </div>

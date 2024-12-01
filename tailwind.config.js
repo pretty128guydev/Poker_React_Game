@@ -21,12 +21,13 @@ module.exports = {
         'custom-shadow': '0 1px 1px rgba(0, 0, 0, 0.25)',
       },
       animation: {
-        fall: 'fall 1s ease-out forwards', // Custom animation for falling
+        "fall": 'fall 1s ease-out forwards', // Custom animation for falling
+        "progress": 'progress 1s ease-out forwards', // Custom animation for falling
       },
       keyframes: {
-        fall: {
+        "fall": {
           '0%': {
-            transform: 'translateY(-200px)', // Start from the top
+            transform: 'translateY(-100px)', // Start from the top
             opacity: '0', // Start invisible
           },
           '100%': {
@@ -34,6 +35,21 @@ module.exports = {
             opacity: '1', // End visible
           },
         },
+        "progress": {
+          '0%': {
+            transform: 'translateY(-50px)', // Start from the top
+            opacity: '0', // Start invisible
+          },
+          '100%': {
+            transform: 'translateY(0)', // End at original position
+            opacity: '1', // End visible
+          },
+        }
+      },
+      transitionDelay: {
+        200: '2ms',
+        400: '4ms',
+        600: '6ms',
       },
     },
   },

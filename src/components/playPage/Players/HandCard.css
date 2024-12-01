@@ -1,12 +1,12 @@
-.card {
-    width: 100px;
-    height: 137px;
+.handcard {
+    width: 60px;
+    height: 80px;
     perspective: 1000px;
     /* Enables 3D flipping */
     cursor: pointer;
 }
 
-.card-inner {
+.handcard-inner {
     width: 100%;
     height: 100%;
     position: relative;
@@ -15,13 +15,13 @@
     transition: transform 1s ease-in-out;
 }
 
-.card.flipped .card-inner {
+.handcard.flipped .handcard-inner {
     transform: rotateY(-180deg);
     /* Flip the card */
 }
 
-.card-front,
-.card-back {
+.handcard-front,
+.handcard-back {
     width: 100%;
     height: 100%;
     position: absolute;
@@ -29,14 +29,14 @@
     /* Hide the back when facing front */
 }
 
-.card-front img,
-.card-back img {
+.handcard-front img,
+.handcard-back img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.card-back {
+.handcard-back {
     transform: rotateY(-180deg);
     /* Back side is rotated */
 }
