@@ -59,7 +59,7 @@ function PlayPage() {
         threeCardsTable();
     }, []);
 
-    const { players, dealerIndex, tableSize } = usePlayerContext();
+    const { players, dealerIndex, tableSize, openOneMore, openTwoMore } = usePlayerContext();
     const playerStatuses = players.map(player => player.status);
 
     useEffect(() => {
@@ -174,16 +174,20 @@ function PlayPage() {
                                             </div>
                                             <div className="flex gap-2 mt-8">
                                                 <div className="card animate-fall delay-200">
-                                                    <Card frontSrc={`/cards/KB.svg`} backSrc="/cards/back.svg" flipped={flipped1} />
+                                                    <Card frontSrc={`/cards/10B.svg`} backSrc="/cards/back.svg" flipped={flipped1} />
                                                 </div>
                                                 <div className="card animate-fall delay-400">
-                                                    <Card frontSrc={`/cards/JD.svg`} backSrc="/cards/back.svg" flipped={flipped2} />
+                                                    <Card frontSrc={`/cards/JB.svg`} backSrc="/cards/back.svg" flipped={flipped2} />
                                                 </div>
                                                 <div className="card animate-fall delay-600">
-                                                    <Card frontSrc={`/cards/7C.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
+                                                    <Card frontSrc={`/cards/QB.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
                                                 </div>
-                                                <div className="w-[100px] h-[137px] aspect-square border-[0.5px] border-dashed border-white rounded-[5px]"></div>
-                                                <div className="w-[100px] h-[137px] aspect-square border-[0.5px] border-dashed border-white rounded-[5px]"></div>
+                                                {openOneMore ? <div className="card animate-fall delay-600">
+                                                    <Card frontSrc={`/cards/KB.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
+                                                </div> : <div className="w-[100px] h-[137px] aspect-square border-[0.5px] border-dashed border-white rounded-[5px]"></div>}
+                                                {openTwoMore ? <div className="card animate-fall delay-600">
+                                                    <Card frontSrc={`/cards/1B.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
+                                                </div> : <div className="w-[100px] h-[137px] aspect-square border-[0.5px] border-dashed border-white rounded-[5px]"></div>}
                                             </div>
                                             {/*//! CHIP */}
                                             {chipPositionArray.map((position, index) => {

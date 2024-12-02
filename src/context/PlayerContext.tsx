@@ -1,12 +1,5 @@
 import React, { createContext, useState, ReactNode, useEffect, useMemo, useCallback, useRef } from "react";
-import { Player, PlayerContextType } from "./types";
-
-export enum PlayerStatus {
-    Idle = 0,
-    Turn = 1,
-    Fold = 2,
-    AllIn = 3
-}
+import { Player, PlayerContextType, PlayerStatus } from "./types";
 
 export const PlayerContext = createContext<PlayerContextType | undefined>(undefined);
 
@@ -21,6 +14,8 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         }))
     );
     const [lastPot, setLastPot] = useState<number>(0);
+    const [openOneMore, setOpenOneMore] = useState<boolean>(false);
+    const [openTwoMore, setOpenTwoMore] = useState<boolean>(false);
     const [tableSize, setTableSize] = useState<number>(9);
     const [playerIndex, setPlayerIndex] = useState<number>(-1);
     const [dealerIndex, setDealerIndex] = useState<number>(0);
@@ -32,12 +27,21 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     // };
 
     const nextPlayer = (turn: number, amount: number) => {
+
+        console.log(`NEXT`, turn, amount, players)
+        const allIdle = players.every(player => player.status !== PlayerStatus.Idle);
+        if (allIdle) {
+            console.warn("All players are not idle. Resetting players.");
+            return -1;
+        }
         let player = turn;
-        while (amount) {
+        let attempts = 0; // Safeguard against infinite loops
+        while (amount && attempts < tableSize) {
             player = (player + 1) % tableSize;
             if (players[player].status === PlayerStatus.Idle) {
                 amount--;
             }
+            attempts++;
         }
 
         return player;
@@ -47,8 +51,11 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         console.log("GAME START", playerIndex);
         let updatedPlayers = players;
         const nextPlayerIndex = nextPlayer(dealer, 3);
+
         updatedPlayers[nextPlayer(dealer, 1)].pot = 2;
         updatedPlayers[nextPlayer(dealer, 2)].pot = 4;
+        updatedPlayers[nextPlayer(dealer, 1)].balance = 198;
+        updatedPlayers[nextPlayer(dealer, 2)].balance = 196;
         updatedPlayers[nextPlayerIndex].status = PlayerStatus.Turn;
         setLastPot(4);
         setDealerIndex(dealer);
@@ -66,6 +73,21 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         let updatedPlayers = players;
         const nextPlayerIndex = nextPlayer(playerIndex, 1);
         updatedPlayers[playerIndex].status = PlayerStatus.Fold;
+        if (!players[nextPlayerIndex]) {
+            console.error(`Player at index ${nextPlayerIndex} does not exist.`);
+            let allPot = 0;
+            players.map((player) => {
+                allPot += player.pot
+            })
+            updatedPlayers[playerIndex].balance += allPot;
+            players.map((player, index) => {
+                if (index !== playerIndex) {
+                    updatedPlayers[playerIndex].status -= PlayerStatus.Idle;
+                }
+                updatedPlayers[playerIndex].pot = 0;
+            })
+            return true;
+        }
         updatedPlayers[nextPlayerIndex].status = PlayerStatus.Turn;
         setPlayers([...updatedPlayers]);
         setPlayerIndex(nextPlayerIndex);
@@ -74,7 +96,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     };
 
     const check = () => {
-        console.log("check", playerIndex, players);
+        console.log("check", playerIndex, players, lastPot);
         if (timer) {
             clearTimeout(timer);
             setTimer(null);
@@ -83,7 +105,14 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         let updatedPlayers = players;
         const nextPlayerIndex = nextPlayer(playerIndex, 1);
         const checkPot = lastPot - updatedPlayers[playerIndex].pot;
-
+        console.log(`POT, LASTPOT`, updatedPlayers[playerIndex].pot, lastPot)
+        if (updatedPlayers[playerIndex].pot == lastPot) {
+            if (openOneMore) {
+                setOpenTwoMore(true)
+            } else {
+                setOpenOneMore(true);
+            }
+        }
         if (updatedPlayers[playerIndex].balance <= checkPot) {
             updatedPlayers[playerIndex].status = PlayerStatus.AllIn;
             updatedPlayers[playerIndex].pot += updatedPlayers[playerIndex].balance;
@@ -94,6 +123,21 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             updatedPlayers[playerIndex].pot = lastPot;
         }
 
+        if (!players[nextPlayerIndex]) {
+            console.error(`Player at index ${nextPlayerIndex} does not exist.`);
+            let allPot = 0;
+            players.map((player) => {
+                allPot += player.pot
+            })
+            updatedPlayers[playerIndex].balance += allPot;
+            players.map((player, index) => {
+                if (index !== playerIndex) {
+                    updatedPlayers[playerIndex].status -= PlayerStatus.Idle;
+                }
+                updatedPlayers[playerIndex].pot = 0;
+            })
+            return true;
+        }
         updatedPlayers[nextPlayerIndex].status = PlayerStatus.Turn;
         setPlayers([...updatedPlayers]);
         setPlayerIndex(nextPlayerIndex);
@@ -102,19 +146,25 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     };
 
     const raise = (amount: number) => {
-        console.log("raise", amount, playerIndex, players);
+        if (playerIndex < 0 || playerIndex >= players.length || !players[playerIndex]) {
+            console.error("Invalid playerIndex:", playerIndex);
+            return false;
+        }
+
         if (lastPot >= players[playerIndex].pot + amount || players[playerIndex].balance < amount) {
             console.error("Invalid amount to raise.");
             return false;
         }
 
         if (timer) {
+            console.log("Clearing timer...");
             clearTimeout(timer);
             setTimer(null);
         }
 
-        let updatedPlayers = players;
         const nextPlayerIndex = nextPlayer(playerIndex, 1);
+
+        let updatedPlayers = players;
 
         if (updatedPlayers[playerIndex].balance === amount) {
             updatedPlayers[playerIndex].status = PlayerStatus.AllIn;
@@ -122,10 +172,25 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             updatedPlayers[playerIndex].balance = 0;
         } else {
             updatedPlayers[playerIndex].status = PlayerStatus.Idle;
-            updatedPlayers[playerIndex].balance -= amount;
-            updatedPlayers[playerIndex].pot += amount;
+            updatedPlayers[playerIndex].balance -= (lastPot + amount - updatedPlayers[playerIndex].pot);
+            updatedPlayers[playerIndex].pot = lastPot + amount;
         }
-
+        setLastPot(updatedPlayers[playerIndex].pot)
+        if (!players[nextPlayerIndex]) {
+            console.error(`Player at index ${nextPlayerIndex} does not exist.`);
+            let allPot = 0;
+            players.map((player) => {
+                allPot += player.pot
+            })
+            updatedPlayers[playerIndex].balance += allPot;
+            players.map((player, index) => {
+                if (index !== playerIndex) {
+                    updatedPlayers[playerIndex].status -= PlayerStatus.Idle;
+                }
+                updatedPlayers[playerIndex].pot = 0;
+            })
+            return true;
+        }
         updatedPlayers[nextPlayerIndex].status = PlayerStatus.Turn;
         setPlayers([...updatedPlayers]);
         setPlayerIndex(nextPlayerIndex);
@@ -139,7 +204,11 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             console.log("It's your turn.");
 
             // Clear any existing timer to avoid overlap
-            if (timer) clearTimeout(timer);
+
+            if (timer) {
+                clearTimeout(timer);
+                setTimer(null);
+            }
 
             // Start a 30-second timer for the current player
             const newTimer = setTimeout(() => {
@@ -158,10 +227,10 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
                 } else if (randValue === 1) {
                     isSuccess = check();
                 } else {
-                    isSuccess = raise(Math.floor(Math.random() * 10 + 1));
+                    isSuccess = raise(Math.floor(Math.random() * 50 + 1));
                 }
             } while (!isSuccess);
-        }, Math.floor(Math.random() * 5 + 3) * 1000);
+        }, Math.floor(Math.random() * 5 + 4) * 1000);
     }, [playerIndex]);
 
     useEffect(() => {
@@ -171,17 +240,28 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         }
     }, []);
 
+    const setPlayerAction = (action: 'fold' | 'check' | 'raise', amount?: number) => {
+
+        if (action === 'fold') {
+            fold();
+        } else if (action === 'check') {
+            check();
+        } else if (action === 'raise' && amount !== undefined) {
+            raise(amount);
+        }
+    };
+
     const contextValue = useMemo(
         () => ({
             players,
             tableSize,
             playerIndex,
             dealerIndex,
-            fold,
-            raise,
-            check
+            openOneMore,
+            openTwoMore,
+            setPlayerAction
         }),
-        [players, tableSize, playerIndex, dealerIndex, fold, raise, check]
+        [players, tableSize, playerIndex, dealerIndex, openOneMore, openTwoMore, fold, raise, check, setPlayerAction]
     );
 
     return <PlayerContext.Provider value={contextValue}>{children}</PlayerContext.Provider>;

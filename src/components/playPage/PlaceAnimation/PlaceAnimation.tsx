@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { usePlayerContext } from "../../../context/usePlayerContext";
-import { PlayerStatus } from "../Players/OppositePlayer";
+import { PlayerStatus } from "../../../context/types";
 
 type PlaceAnimationProps = {
     top?: string; // CSS top position

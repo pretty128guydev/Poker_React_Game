@@ -104,18 +104,18 @@ export const chipPosition = {
     nine: [
         {
             // 1
-            bottom: "-20px",
-            left: "350px"
+            bottom: "-10px",
+            left: "370px"
         },
         {
             // 2
-            bottom: "-20px",
-            left: "110px"
+            bottom: "-10px",
+            left: "120px"
         },
         {
             // 3
             bottom: "60px",
-            left: "-15px"
+            left: "-5px"
         },
         {
             // 4
@@ -124,28 +124,28 @@ export const chipPosition = {
         },
         {
             // 5
-            bottom: "280px",
-            left: "165px"
+            bottom: "290px",
+            left: "175px"
         },
         {
             // 6
-            bottom: "280px",
-            left: "565px"
+            bottom: "290px",
+            left: "575px"
         },
         {
             // 7
             bottom: "210px",
-            left: "740px"
+            left: "755px"
         },
         {
             // 8
             bottom: "60px",
-            left: "745px"
+            left: "750px"
         },
         {
-            // 8
-            bottom: "-20px",
-            left: "610px"
+            // 9
+            bottom: "-10px",
+            left: "620px"
         }
     ]
 };

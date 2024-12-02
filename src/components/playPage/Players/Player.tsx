@@ -3,7 +3,7 @@ import Badge from "../Badge/Badge";
 import ProgressBar from "../AutoProgressBar/AutoProgressBar";
 import HandCard from "./HandCard";
 import { usePlayerContext } from "../../../context/usePlayerContext";
-import { PlayerStatus } from "./OppositePlayer";
+import { PlayerStatus } from "../../../context/types";
 
 type PlayerProps = {
     left?: string; // Front side image source
@@ -32,29 +32,28 @@ const Player: React.FC<PlayerProps> = ({ left, top, index, color }) => {
         setFlipped1(true);
         setTimeout(() => {
             setFlipped2(true);
-        }, 500);
+        }, 100);
     }
 
     useEffect(() => {
-        if (players[index].status && players[index].status !== PlayerStatus.Fold) {
-            cardOpen();
-        }
+        cardOpen();
     }, []);
 
     return (
         <div
             key={index}
-            className={`${
-                players[index].status && players[index].status === PlayerStatus.Fold ? "opacity-60" : ""
-            } absolute flex flex-col justify-center text-gray-600 w-[150px] h-[140px] mt-[40px] transform -translate-x-1/2 -translate-y-1/2`}
+            className={`${players[index].status && players[index].status === PlayerStatus.Fold ? "opacity-60" : ""
+                } absolute flex flex-col justify-center text-gray-600 w-[150px] h-[140px] mt-[40px] transform -translate-x-1/2 -translate-y-1/2`}
             style={{
                 left: left,
                 top: top
             }}
         >
             <div className="flex justify-center gap-1">
-                <HandCard frontSrc={`/cards/1A.svg`} backSrc="/cards/back.svg" flipped={flipped1} />
-                <HandCard frontSrc={`/cards/1C.svg`} backSrc="/cards/back.svg" flipped={flipped2} />
+                <img src={`/cards/1A.svg`} width={60} height={80} />
+                <img src={`/cards/1C.svg`} width={60} height={80} />
+                {/* <HandCard frontSrc={`/cards/1A.svg`} backSrc="/cards/back.svg" flipped={flipped1} />
+                <HandCard frontSrc={`/cards/1C.svg`} backSrc="/cards/back.svg" flipped={flipped2} /> */}
             </div>
             <div className="relative flex flex-col justify-end mt-[-6px] mx-1s">
                 <div
@@ -63,10 +62,11 @@ const Player: React.FC<PlayerProps> = ({ left, top, index, color }) => {
                 >
                     {/* <p className="text-white font-bold text-sm mt-auto mb-1.5 self-center">+100</p> */}
                     <ProgressBar index={index} />
-                    {players[index].status && players[index].status === PlayerStatus.Fold ? (
+                    {players[index].status && players[index].status === PlayerStatus.Fold && (
                         <span className="text-white animate-progress delay-2000 flex items-center w-full h-2 mb-2 mt-auto gap-2 flex justify-center">FOLD</span>
-                    ) : (
-                        <></>
+                    )}
+                    {players[index].status && players[index].status === PlayerStatus.AllIn && (
+                        <span className="text-white animate-progress delay-2000 flex items-center w-full h-2 mb-2 mt-auto gap-2 flex justify-center">All In</span>
                     )}
                 </div>
                 <div className="absolute top-[0%] w-full">
