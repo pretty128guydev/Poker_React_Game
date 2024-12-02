@@ -13,7 +13,7 @@ export interface PlayerContextType {
     setPlayerBalance: (index: number, balance: number) => void;
     setPlayerPot: (index: number, balance: number) => void;
     handleChoiceChange: (index: number, choice: number) => void;
-    moveToNextPlayer: (index: number) => void;
+    moveToNextPlayer: (index: number, updatedPlayers: Player[]) => void;
     changeToThinkingBeforeTimeout: () => void;
     currentDealerIndex: number;
     currentPlayerIndex: number;

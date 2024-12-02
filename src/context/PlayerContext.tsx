@@ -24,11 +24,9 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         console.log(updatePlayer)
     };
 
-    const startThinking = (index: number) => {
-        console.log("START!!!!!", index, players)
+    const initialStart = (index: number) => {
         const updatedPlayers = [...players];
         updatedPlayers[index] = { ...updatedPlayers[index], choice: 0 };
-        console.log(updatedPlayers)
         setPlayers(updatedPlayers);
 
         // Clear any existing timer to avoid overlap
@@ -36,10 +34,24 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
         // Start a 30-second timer for the current player
         const newTimer = setTimeout(() => {
+            moveToNextPlayer(index, updatedPlayers);
+        }, 30000); // 30 seconds
+        setTimer(newTimer);
+    }
+
+    const startThinking = (index: number, updatedPlayers: Player[]) => {
+        console.log("START!!!!!", index, players)
+        updatedPlayers[index] = { ...updatedPlayers[index], choice: 0 };
+        console.log(updatedPlayers)
+        setPlayers(updatedPlayers);
+
+        // Clear any existing timer to avoid overlap
+        if (timer) clearTimeout(timer);
+        console.log(`current:`, currentPlayerIndex, "index: ", index)
+        // Start a 30-second timer for the current player
+        const newTimer = setTimeout(() => {
             // Ensure the timeout only executes if this is still the current player
-            if (index === currentPlayerIndex) {
-                moveToNextPlayer(index);
-            }
+            moveToNextPlayer(index, updatedPlayers);
         }, 30000); // 30 seconds
         setTimer(newTimer);
     };
@@ -58,11 +70,11 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             if (timer) clearTimeout(timer);
 
             // Move to the next player if the current player made a choice
-            moveToNextPlayer(index);
+            moveToNextPlayer(index, updatedPlayers);
         }
     };
 
-    const moveToNextPlayer = (index: number) => {
+    const moveToNextPlayer = (index: number, updatedPlayers: Player[]) => {
         console.log("MoveToNextPlayer")
         // Clear the timer for the current player
         if (timer) {
@@ -70,12 +82,11 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             setTimer(null); // Reset the timer
         }
 
-        const updatedPlayers = [...players];
         console.log(index)
         console.log(`beforemove`, updatedPlayers[index])
         updatedPlayers[index] = {
             ...updatedPlayers[index],
-            choice: updatedPlayers[index].choice === 0 ? 1 : updatedPlayers[index].choice,
+            choice: 1,
         };
         console.log(updatedPlayers)
 
@@ -91,15 +102,10 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             return; // Exit if all players have balance 0
         }
 
-        updatedPlayers[nextIndex] = {
-            ...updatedPlayers[nextIndex],
-            choice: 0,
-        };
-
         setPlayers(updatedPlayers);
         setCurrentPlayerIndex(nextIndex);
 
-        startThinking(nextIndex);
+        startThinking(nextIndex, updatedPlayers);
     };
 
     const setPlayerBalance = (index: number, balance: number) => {
@@ -163,8 +169,8 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     };
 
     useEffect(() => {
-        startThinking(currentPlayerIndex);
-    }, [currentPlayerIndex]);
+        initialStart(0);
+    }, []);
 
     return (
         <PlayerContext.Provider

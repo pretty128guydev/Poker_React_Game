@@ -189,13 +189,13 @@ function PlayPage() {
                                             </div>
                                             <div className="flex gap-2 mt-8">
                                                 <div className="card animate-fall delay-200">
-                                                    <Card frontSrc={`/cards/${getRandomCard()}.svg`} backSrc="/cards/back.svg" flipped={flipped1} />
+                                                    <Card frontSrc={`/cards/KB.svg`} backSrc="/cards/back.svg" flipped={flipped1} />
                                                 </div>
                                                 <div className="card animate-fall delay-400">
-                                                    <Card frontSrc={`/cards/${getRandomCard()}.svg`} backSrc="/cards/back.svg" flipped={flipped2} />
+                                                    <Card frontSrc={`/cards/JD.svg`} backSrc="/cards/back.svg" flipped={flipped2} />
                                                 </div>
                                                 <div className="card animate-fall delay-600">
-                                                    <Card frontSrc={`/cards/${getRandomCard()}.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
+                                                    <Card frontSrc={`/cards/7C.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
                                                 </div>
                                                 <div className="w-[100px] h-[137px] aspect-square border-[0.5px] border-dashed border-white rounded-[5px]"></div>
                                                 <div className="w-[100px] h-[137px] aspect-square border-[0.5px] border-dashed border-white rounded-[5px]"></div>
