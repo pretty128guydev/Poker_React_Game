@@ -8,7 +8,7 @@ type ProgressBarProps = {
 
 const ProgressBar: React.FC<ProgressBarProps> = ({ index }) => {
     const [progress, setProgress] = useState(0);
-    const { players, updatePlayer, moveToNextPlayer } = usePlayerContext();
+    const { players } = usePlayerContext();
 
     const currentPlayer = players[index];
 
@@ -32,7 +32,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ index }) => {
         return () => {
             if (interval) clearInterval(interval);
         };
-    }, [currentPlayer.status, index, updatePlayer, moveToNextPlayer]);
+    }, [currentPlayer.status]);
 
     if (players[index].status === PlayerStatus.Turn) {
         return (

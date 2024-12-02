@@ -14,6 +14,7 @@ import Chip from "./Chip/Chip";
 import PlaceAnimation from "./PlaceAnimation/PlaceAnimation";
 import { PlayerContext } from "../../context/PlayerContext";
 import { usePlayerContext } from "../../context/usePlayerContext";
+import { PlayerStatus } from "../../context/types";
 
 //* Define the interface for the position object
 interface PositionArray {
@@ -33,10 +34,7 @@ const calculateZoom = () => {
 };
 
 function PlayPage() {
-    const [selectedValue, setSelectedValue] = useState<number | string>("9");
-    const [currentDealer, setCurrentDealer] = useState<number>(0);
     const [currentIndex, setCurrentIndex] = useState<number>(1);
-    const [currentChip, setCurrentChip] = useState<number>(0);
     const [playerPositionArray, setPlayerPositionArray] = useState<PositionArray[]>([]);
     const [chipPositionArray, setChipPositionArray] = useState<PositionArray[]>([]);
     const [dealerPositionArray, setDealerPositionArray] = useState<PositionArray[]>([]);
@@ -47,33 +45,22 @@ function PlayPage() {
 
     function threeCardsTable() {
         setTimeout(() => {
-            setFlipped1(true)
+            setFlipped1(true);
         }, 1000);
         setTimeout(() => {
-            setFlipped2(true)
+            setFlipped2(true);
         }, 1100);
         setTimeout(() => {
-            setFlipped3(true)
+            setFlipped3(true);
         }, 1200);
     }
 
     useEffect(() => {
         threeCardsTable();
-    }, [])
+    }, []);
 
-
-    const { players, updatePlayer, currentDealerIndex } = usePlayerContext();
+    const { players, dealerIndex, tableSize } = usePlayerContext();
     const playerStatuses = players.map(player => player.status);
-
-    const start = () => {
-        if (players[2].balance !== 0) {
-            updatePlayer(2, { ...players[2], balance: 0 });
-        }
-        if (players[4].balance !== 0) {
-            updatePlayer(4, { ...players[4], balance: 0 });
-        }
-        console.log(players);
-    };
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -115,13 +102,13 @@ function PlayPage() {
 
     useEffect(() => {
         //* set the number of players
-        switch (selectedValue) {
-            case "6":
+        switch (tableSize) {
+            case 6:
                 setPlayerPositionArray(playerPosition.six);
                 setChipPositionArray(chipPosition.six);
                 setDealerPositionArray(dealerPosition.six);
                 break;
-            case "9":
+            case 9:
                 setPlayerPositionArray(playerPosition.nine);
                 setChipPositionArray(chipPosition.nine);
                 setDealerPositionArray(dealerPosition.nine);
@@ -131,7 +118,7 @@ function PlayPage() {
                 setChipPositionArray([]);
                 setDealerPositionArray([]);
         }
-    }, [selectedValue]);
+    }, [tableSize]);
 
     return (
         <div className="h-screen">
@@ -180,9 +167,7 @@ function PlayPage() {
                                         <div className="relative flex flex-col absolute w-[800px] h-[300px] left-1/2 top-5 transform -translate-x-1/2 text-center z-0 border-[2px] border-[#c9c9c985] rounded-full flex items-center justify-center shadow-[0_7px_13px_rgba(0,0,0,0.3)]">
                                             {/* //! Table */}
                                             <div className="w-[140px] h-[25px] rounded-full bg-[#00000054] flex align-center justify-center">
-                                                <span className="text-[#dbd3d3] mr-2" onClick={start}>
-                                                    Total Pot: 50
-                                                </span>
+                                                <span className="text-[#dbd3d3] mr-2">Total Pot: 50</span>
                                             </div>
                                             <div className="w-[130px] h-[21px] rounded-full bg-[#00000054] flex align-center justify-center mt-2">
                                                 <span className="text-[#dbd3d3] mr-2">Main Pot: 50</span>
@@ -207,7 +192,7 @@ function PlayPage() {
                                                         key={index} // Make sure to add a unique key
                                                         style={{
                                                             left: position.left,
-                                                            bottom: position.bottom,
+                                                            bottom: position.bottom
                                                         }}
                                                         className="absolute"
                                                     >
@@ -217,41 +202,49 @@ function PlayPage() {
                                             })}
                                         </div>
                                     </div>
-                                    {playerPositionArray.map((position, index) => (
-                                        <>
-                                            {index == 10 ? (
-                                                <VacantPlayer key={`vacant-${index}-${position.left}`} index={index} left={position.left} top={position.top} />
-                                            ) : index != 0 ? (
-                                                <OppositePlayer
-                                                    key={`opposite-${index}-${position.color}`}
-                                                    index={index}
-                                                    currentIndex={currentIndex}
-                                                    left={position.left}
-                                                    top={position.top}
-                                                    color={position.color}
-                                                    status={playerStatuses[index]}
-                                                />
-                                            ) : (
-                                                <Player
-                                                    key={`mine-${index}-${playerStatuses[index]}`}
-                                                    index={index}
-                                                    currentIndex={currentIndex}
-                                                    left={position.left}
-                                                    top={position.top}
-                                                    color={position.color}
-                                                    status={playerStatuses[index]}
-                                                />
-                                            )}
-                                            <div key={`animation-${index}`}>
-                                                <PlaceAnimation left={position.left} top={position.top} index={index} />
-                                            </div>
-                                        </>
-                                    ))}
+                                    {playerPositionArray.map((position, index) => {
+                                        const playerData = players[index];
+                                        return (
+                                            <>
+                                                {playerData.status === PlayerStatus.SeatOff ? (
+                                                    <VacantPlayer
+                                                        key={`vacant-${index}-${position.left}`}
+                                                        index={index}
+                                                        left={position.left}
+                                                        top={position.top}
+                                                    />
+                                                ) : index != 0 ? (
+                                                    <OppositePlayer
+                                                        key={`opposite-${index}-${position.color}`}
+                                                        index={index}
+                                                        currentIndex={currentIndex}
+                                                        left={position.left}
+                                                        top={position.top}
+                                                        color={position.color}
+                                                        status={playerStatuses[index]}
+                                                    />
+                                                ) : (
+                                                    <Player
+                                                        key={`mine-${index}-${playerStatuses[index]}`}
+                                                        index={index}
+                                                        currentIndex={currentIndex}
+                                                        left={position.left}
+                                                        top={position.top}
+                                                        color={position.color}
+                                                        status={playerStatuses[index]}
+                                                    />
+                                                )}
+                                                <div key={`animation-${index}`}>
+                                                    <PlaceAnimation left={position.left} top={position.top} index={index} />
+                                                </div>
+                                            </>
+                                        );
+                                    })}
                                     {/*//! Dealer */}
                                     <div
                                         style={{
-                                            top: dealerPositionArray[6]?.top,
-                                            left: dealerPositionArray[6]?.left,
+                                            top: dealerPositionArray[dealerIndex]?.top,
+                                            left: dealerPositionArray[dealerIndex]?.left,
                                             transition: "top 1s ease, left 1s ease"
                                         }}
                                         className="absolute"

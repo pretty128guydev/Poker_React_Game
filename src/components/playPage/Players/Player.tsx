@@ -23,15 +23,15 @@ function getRandomCard() {
     return randomRank + randomSuit;
 }
 
-const Player: React.FC<PlayerProps> = ({ left, top, index, color, currentIndex, status }) => {
+const Player: React.FC<PlayerProps> = ({ left, top, index, color }) => {
     const [flipped1, setFlipped1] = useState(false);
     const [flipped2, setFlipped2] = useState(false);
-    const { players, updatePlayer, currentDealerIndex } = usePlayerContext();
+    const { players } = usePlayerContext();
 
     function cardOpen() {
-        setFlipped1(true)
+        setFlipped1(true);
         setTimeout(() => {
-            setFlipped2(true)
+            setFlipped2(true);
         }, 500);
     }
 
@@ -39,13 +39,14 @@ const Player: React.FC<PlayerProps> = ({ left, top, index, color, currentIndex, 
         if (players[index].status && players[index].status !== PlayerStatus.Fold) {
             cardOpen();
         }
-    }, [])
+    }, []);
 
     return (
         <div
             key={index}
-            className={`${players[index].status && players[index].status === PlayerStatus.Fold ? "opacity-60" : ""} absolute flex flex-col justify-center text-gray-600 w-[150px] h-[140px] mt-[40px] transform -translate-x-1/2 -translate-y-1/2`}
-
+            className={`${
+                players[index].status && players[index].status === PlayerStatus.Fold ? "opacity-60" : ""
+            } absolute flex flex-col justify-center text-gray-600 w-[150px] h-[140px] mt-[40px] transform -translate-x-1/2 -translate-y-1/2`}
             style={{
                 left: left,
                 top: top
@@ -62,16 +63,17 @@ const Player: React.FC<PlayerProps> = ({ left, top, index, color, currentIndex, 
                 >
                     {/* <p className="text-white font-bold text-sm mt-auto mb-1.5 self-center">+100</p> */}
                     <ProgressBar index={index} />
-                    {players[index].status && players[index].status === PlayerStatus.Fold ?
-                        <span className="text-white animate-progress delay-2000 flex items-center w-full h-2 mb-2 mt-auto gap-2 flex justify-center">FOLD</span> :
+                    {players[index].status && players[index].status === PlayerStatus.Fold ? (
+                        <span className="text-white animate-progress delay-2000 flex items-center w-full h-2 mb-2 mt-auto gap-2 flex justify-center">FOLD</span>
+                    ) : (
                         <></>
-                    }
+                    )}
                 </div>
                 <div className="absolute top-[0%] w-full">
                     <Badge count={index + 1} value={players[index].balance} color={color} />
                 </div>
             </div>
-        </div >
+        </div>
     );
 };
 

@@ -20,16 +20,17 @@ type OppositePlayerProps = {
 };
 
 const OppositePlayer: React.FC<OppositePlayerProps> = ({ left, top, index, color, currentIndex, status }) => {
-    const { players, updatePlayer, currentDealerIndex } = usePlayerContext();
+    const { players } = usePlayerContext();
     return (
         <div
             key={index}
-            className={`${players[index].status && players[index].status === PlayerStatus.Fold ? "opacity-60" : ""}  absolute flex flex-col justify-center text-gray-600 w-[150px] h-[140px] mt-[40px] transform -translate-x-1/2 -translate-y-1/2`}
+            className={`${
+                players[index].status && players[index].status === PlayerStatus.Fold ? "opacity-60" : ""
+            }  absolute flex flex-col justify-center text-gray-600 w-[150px] h-[140px] mt-[40px] transform -translate-x-1/2 -translate-y-1/2`}
             style={{
                 left: left,
                 top: top
-            }
-            }
+            }}
         >
             <div className="flex justify-center gap-1">
                 <img src={`/cards/Back.svg`} className="w-[35%] h-[auto]" />
@@ -42,16 +43,17 @@ const OppositePlayer: React.FC<OppositePlayerProps> = ({ left, top, index, color
                 >
                     {/* <p className="text-white font-bold text-sm mt-auto mb-1.5 self-center">+100</p> */}
                     <ProgressBar index={index} />
-                    {players[index].status && players[index].status === PlayerStatus.Fold ?
-                        <span className="text-white animate-progress delay-2000 flex items-center w-full h-2 mb-2 mt-auto gap-2 flex justify-center">FOLD</span> :
+                    {players[index].status && players[index].status === PlayerStatus.Fold ? (
+                        <span className="text-white animate-progress delay-2000 flex items-center w-full h-2 mb-2 mt-auto gap-2 flex justify-center">FOLD</span>
+                    ) : (
                         <></>
-                    }
+                    )}
                 </div>
                 <div className="absolute top-[0%] w-full">
                     <Badge count={index + 1} value={players[index].balance} color={color} />
                 </div>
             </div>
-        </div >
+        </div>
     );
 };
 

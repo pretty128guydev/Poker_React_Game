@@ -3,37 +3,29 @@ import { usePlayerContext } from "../context/usePlayerContext";
 
 const PokerActionPanel: React.FC = () => {
     const [raiseAmount, setRaiseAmount] = useState(24);
-    const { players, changeToThinkingBeforeTimeout, setPlayerBalance, setPlayerPot, currentPlayerIndex, handleStatusChange } = usePlayerContext();
+    const { players } = usePlayerContext();
 
     const handleRaiseChange = (newAmount: number) => {
         setRaiseAmount(newAmount);
     };
 
-    const setBalance1 = () => {
-        setPlayerBalance(3, 44);
-        console.log(players);
-    };
+    const onFold = () => {};
 
-    const setBalance2 = () => {
-        setPlayerPot(3, 2);
-    };
-    console.log(`CURRENT PALYER INDEX: `, currentPlayerIndex)
+    const onCheck = () => {};
 
-    const start = () => {
-        handleStatusChange(currentPlayerIndex, 1, players);
-    };
+    const onRaise = () => {};
 
     return (
         <div className="flex flex-col justify-center rounded-lg w-[600px] h-full text-white space-y-6 mb-2">
             {/* Action Buttons */}
             <div className="flex justify-between gap-2">
-                <button className="bg-[#0c0c0c80] hover:bg-[#0c0c0c] px-4 py-2 rounded-lg w-full border-[1px] border-gray-400" onClick={start}>
+                <button className="bg-[#0c0c0c80] hover:bg-[#0c0c0c] px-4 py-2 rounded-lg w-full border-[1px] border-gray-400" onClick={onFold}>
                     FOLD
                 </button>
-                <button className="bg-[#0c0c0c80] hover:bg-[#0c0c0c] px-4 py-2 rounded-lg w-full border-[1px] border-gray-400" onClick={setBalance1}>
-                    CALL 10
+                <button className="bg-[#0c0c0c80] hover:bg-[#0c0c0c] px-4 py-2 rounded-lg w-full border-[1px] border-gray-400" onClick={onCheck}>
+                    CHECK
                 </button>
-                <button className="bg-[#0c0c0c80] hover:bg-[#0c0c0c] px-4 py-2 rounded-lg w-full border-[1px] border-gray-400" onClick={setBalance2}>
+                <button className="bg-[#0c0c0c80] hover:bg-[#0c0c0c] px-4 py-2 rounded-lg w-full border-[1px] border-gray-400" onClick={onRaise}>
                     RAISE TO {raiseAmount}
                 </button>
             </div>
