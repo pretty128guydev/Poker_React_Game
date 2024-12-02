@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { usePlayerContext } from "../../../context/usePlayerContext";
+import { PlayerStatus } from "../Players/OppositePlayer";
 
 type ProgressBarProps = {
     index: number;
 };
-
-export enum PlayerChoice {
-    Idle = 0,
-    Turn = 1,
-    Fold = 2,
-    AllIn = 3
-}
 
 const ProgressBar: React.FC<ProgressBarProps> = ({ index }) => {
     const [progress, setProgress] = useState(0);
@@ -21,7 +15,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ index }) => {
     useEffect(() => {
         let interval: NodeJS.Timeout | null = null;
 
-        if (currentPlayer.choice === PlayerChoice.Turn) {
+        if (currentPlayer.status === PlayerStatus.Turn) {
             setProgress(0); // Reset progress when "thinking" starts
 
             interval = setInterval(() => {
@@ -38,9 +32,9 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ index }) => {
         return () => {
             if (interval) clearInterval(interval);
         };
-    }, [currentPlayer.choice, index, updatePlayer, moveToNextPlayer]);
+    }, [currentPlayer.status, index, updatePlayer, moveToNextPlayer]);
 
-    if (players[index].choice === PlayerChoice.Turn) {
+    if (players[index].status === PlayerStatus.Turn) {
         return (
             <div className={"animate-progress delay-2000 flex items-center w-full h-2 mb-2 mt-auto gap-2"}>
                 <span className="ml-2 text-white text-sm w-[15px]">{30 - progress}</span>

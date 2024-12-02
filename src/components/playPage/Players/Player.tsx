@@ -3,13 +3,7 @@ import Badge from "../Badge/Badge";
 import ProgressBar from "../AutoProgressBar/AutoProgressBar";
 import HandCard from "./HandCard";
 import { usePlayerContext } from "../../../context/usePlayerContext";
-
-export enum PlayerChoice {
-    Idle = 0,
-    Turn = 1,
-    Fold = 2,
-    AllIn = 3
-}
+import { PlayerStatus } from "./OppositePlayer";
 
 type PlayerProps = {
     left?: string; // Front side image source
@@ -17,7 +11,7 @@ type PlayerProps = {
     index: number;
     currentIndex: number;
     color?: string;
-    choice?: number;
+    status?: number;
 };
 
 //* Get Randome Card
@@ -29,22 +23,28 @@ function getRandomCard() {
     return randomRank + randomSuit;
 }
 
-const Player: React.FC<PlayerProps> = ({ left, top, index, color, currentIndex, choice }) => {
+const Player: React.FC<PlayerProps> = ({ left, top, index, color, currentIndex, status }) => {
     const [flipped1, setFlipped1] = useState(false);
     const [flipped2, setFlipped2] = useState(false);
     const { players, updatePlayer, currentDealerIndex } = usePlayerContext();
 
-    useEffect(() => {
+    function cardOpen() {
         setFlipped1(true)
         setTimeout(() => {
             setFlipped2(true)
         }, 500);
+    }
+
+    useEffect(() => {
+        if (players[index].status && players[index].status !== PlayerStatus.Fold) {
+            cardOpen();
+        }
     }, [])
 
     return (
         <div
             key={index}
-            className={`${players[index].choice && players[index].choice === PlayerChoice.Fold ? "opacity-60" : ""} absolute flex flex-col justify-center text-gray-600 w-[150px] h-[140px] mt-[40px] transform -translate-x-1/2 -translate-y-1/2`}
+            className={`${players[index].status && players[index].status === PlayerStatus.Fold ? "opacity-60" : ""} absolute flex flex-col justify-center text-gray-600 w-[150px] h-[140px] mt-[40px] transform -translate-x-1/2 -translate-y-1/2`}
 
             style={{
                 left: left,
@@ -62,7 +62,7 @@ const Player: React.FC<PlayerProps> = ({ left, top, index, color, currentIndex, 
                 >
                     {/* <p className="text-white font-bold text-sm mt-auto mb-1.5 self-center">+100</p> */}
                     <ProgressBar index={index} />
-                    {players[index].choice && players[index].choice === PlayerChoice.Fold ?
+                    {players[index].status && players[index].status === PlayerStatus.Fold ?
                         <span className="text-white animate-progress delay-2000 flex items-center w-full h-2 mb-2 mt-auto gap-2 flex justify-center">FOLD</span> :
                         <></>
                     }

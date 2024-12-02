@@ -1,7 +1,7 @@
 import React, { createContext, useState, ReactNode, useEffect } from "react";
 import { Player, PlayerContextType } from "./types";
 
-export enum PlayerChoice {
+export enum PlayerStatus {
     Idle = 0,
     Turn = 1,
     Fold = 2,
@@ -15,7 +15,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         Array.from({ length: 9 }, (_, index) => ({
             index,
             balance: 200,
-            choice: PlayerChoice.Idle, //? thinking - 0, fold - 1
+            status: PlayerStatus.Idle, //? thinking - 0, fold - 1
             pot: 0,
             place: index + 1
         }))
@@ -34,7 +34,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     const initialStart = (index: number) => {
         console.log("GAME START")
         const updatedPlayers = [...players];
-        updatedPlayers[index] = { ...updatedPlayers[index], choice: PlayerChoice.Turn };
+        updatedPlayers[index] = { ...updatedPlayers[index], status: PlayerStatus.Turn };
         updatedPlayers[7] = { ...updatedPlayers[7], pot: 2 };
         updatedPlayers[8] = { ...updatedPlayers[8], pot: 4 };
         setPlayers(updatedPlayers);
@@ -57,7 +57,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             setTimer(null);
         }
 
-        updatedPlayers[index] = { ...updatedPlayers[index], choice: PlayerChoice.Turn };
+        updatedPlayers[index] = { ...updatedPlayers[index], status: PlayerStatus.Turn };
         console.log(updatedPlayers)
         setPlayers(updatedPlayers);
 
@@ -70,22 +70,22 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         setTimer(newTimer);
     };
 
-    const handleChoiceChange = (index: number, newChoice: number, updatedPlayers: Player[]) => {
-        console.log(`newChoice:`, newChoice)
+    const handleStatusChange = (index: number, newStatus: number, updatedPlayers: Player[]) => {
+        console.log(`newStatus:`, newStatus)
         // Clear the current timer
         if (timer) {
             clearTimeout(timer);
             setTimer(null);
         }
 
-        // Update the player's choice
-        updatedPlayers[index] = { ...updatedPlayers[index], choice: newChoice };
+        // Update the player's status
+        updatedPlayers[index] = { ...updatedPlayers[index], status: newStatus };
         console.log(updatedPlayers)
         // Immediately update state 
         setPlayers(updatedPlayers);
         console.log(index, currentPlayerIndex)
 
-        // Move to the next player if the current player made a choice
+        // Move to the next player if the current player made a status
         moveToNextPlayer(index, updatedPlayers);
     };
 
@@ -101,7 +101,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         console.log(`beforemove`, updatedPlayers[index])
         updatedPlayers[index] = {
             ...updatedPlayers[index],
-            choice: PlayerChoice.Fold,
+            status: PlayerStatus.Fold,
         };
         console.log(updatedPlayers)
 
@@ -127,7 +127,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         setPlayers(prev =>
             prev.map(player =>
                 player.index === index
-                    ? { ...player, balance: balance, choice: balance === 0 ? PlayerChoice.Fold : player.choice } // Automatically set "fold" if balance is 0
+                    ? { ...player, balance: balance, status: balance === 0 ? PlayerStatus.Fold : player.status } // Automatically set "fold" if balance is 0
                     : player
             )
         );
@@ -155,7 +155,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         // Fold the current player
         updatedPlayers[currentPlayerIndex] = {
             ...updatedPlayers[currentPlayerIndex],
-            choice: PlayerChoice.Fold
+            status: PlayerStatus.Fold
         };
 
         // Move to the next player
@@ -175,7 +175,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         // Set the next player to "thinking"
         updatedPlayers[nextIndex] = {
             ...updatedPlayers[nextIndex],
-            choice: PlayerChoice.Turn
+            status: PlayerStatus.Turn
         };
 
         // Update state
@@ -197,7 +197,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
                 setPlayerBalance,
                 changeToThinkingBeforeTimeout,
                 setPlayerPot,
-                handleChoiceChange,
+                handleStatusChange,
                 currentPlayerIndex
             }}
         >

@@ -3,7 +3,7 @@ import { usePlayerContext } from "../context/usePlayerContext";
 
 const PokerActionPanel: React.FC = () => {
     const [raiseAmount, setRaiseAmount] = useState(24);
-    const { players, changeToThinkingBeforeTimeout, setPlayerBalance, setPlayerPot, currentPlayerIndex, handleChoiceChange } = usePlayerContext();
+    const { players, changeToThinkingBeforeTimeout, setPlayerBalance, setPlayerPot, currentPlayerIndex, handleStatusChange } = usePlayerContext();
 
     const handleRaiseChange = (newAmount: number) => {
         setRaiseAmount(newAmount);
@@ -20,7 +20,7 @@ const PokerActionPanel: React.FC = () => {
     console.log(`CURRENT PALYER INDEX: `, currentPlayerIndex)
 
     const start = () => {
-        handleChoiceChange(currentPlayerIndex, 1, players);
+        handleStatusChange(currentPlayerIndex, 1, players);
     };
 
     return (

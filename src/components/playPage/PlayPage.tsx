@@ -63,7 +63,7 @@ function PlayPage() {
 
 
     const { players, updatePlayer, currentDealerIndex } = usePlayerContext();
-    const playerChoices = players.map(player => player.choice);
+    const playerStatuses = players.map(player => player.status);
 
     const start = () => {
         if (players[2].balance !== 0) {
@@ -229,17 +229,17 @@ function PlayPage() {
                                                     left={position.left}
                                                     top={position.top}
                                                     color={position.color}
-                                                    choice={playerChoices[index]}
+                                                    status={playerStatuses[index]}
                                                 />
                                             ) : (
                                                 <Player
-                                                    key={`mine-${index}-${playerChoices[index]}`}
+                                                    key={`mine-${index}-${playerStatuses[index]}`}
                                                     index={index}
                                                     currentIndex={currentIndex}
                                                     left={position.left}
                                                     top={position.top}
                                                     color={position.color}
-                                                    choice={playerChoices[index]}
+                                                    status={playerStatuses[index]}
                                                 />
                                             )}
                                             <div key={`animation-${index}`}>

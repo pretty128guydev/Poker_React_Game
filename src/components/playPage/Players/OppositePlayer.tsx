@@ -3,7 +3,7 @@ import Badge from "../Badge/Badge";
 import ProgressBar from "../AutoProgressBar/AutoProgressBar";
 import { usePlayerContext } from "../../../context/usePlayerContext";
 
-export enum PlayerChoice {
+export enum PlayerStatus {
     Idle = 0,
     Turn = 1,
     Fold = 2,
@@ -16,15 +16,15 @@ type OppositePlayerProps = {
     index: number;
     currentIndex: number;
     color?: string;
-    choice?: number;
+    status?: number;
 };
 
-const OppositePlayer: React.FC<OppositePlayerProps> = ({ left, top, index, color, currentIndex, choice }) => {
+const OppositePlayer: React.FC<OppositePlayerProps> = ({ left, top, index, color, currentIndex, status }) => {
     const { players, updatePlayer, currentDealerIndex } = usePlayerContext();
     return (
         <div
             key={index}
-            className={`${players[index].choice && players[index].choice === PlayerChoice.Fold ? "opacity-60" : ""}  absolute flex flex-col justify-center text-gray-600 w-[150px] h-[140px] mt-[40px] transform -translate-x-1/2 -translate-y-1/2`}
+            className={`${players[index].status && players[index].status === PlayerStatus.Fold ? "opacity-60" : ""}  absolute flex flex-col justify-center text-gray-600 w-[150px] h-[140px] mt-[40px] transform -translate-x-1/2 -translate-y-1/2`}
             style={{
                 left: left,
                 top: top
@@ -42,7 +42,7 @@ const OppositePlayer: React.FC<OppositePlayerProps> = ({ left, top, index, color
                 >
                     {/* <p className="text-white font-bold text-sm mt-auto mb-1.5 self-center">+100</p> */}
                     <ProgressBar index={index} />
-                    {players[index].choice && players[index].choice === PlayerChoice.Fold ?
+                    {players[index].status && players[index].status === PlayerStatus.Fold ?
                         <span className="text-white animate-progress delay-2000 flex items-center w-full h-2 mb-2 mt-auto gap-2 flex justify-center">FOLD</span> :
                         <></>
                     }
