@@ -7,6 +7,13 @@ type PlaceAnimationProps = {
     index: number; // Index of the player
 };
 
+export enum PlayerChoice {
+    Idle = 0,
+    Turn = 1,
+    Fold = 2,
+    AllIn = 3
+}
+
 const PlaceAnimation: React.FC<PlaceAnimationProps> = ({ left, top, index }) => {
     const { players } = usePlayerContext();
     const [isThinking, setIsThinking] = useState(false);
@@ -14,7 +21,7 @@ const PlaceAnimation: React.FC<PlaceAnimationProps> = ({ left, top, index }) => 
     const currentPlayer = players[index];
 
     useEffect(() => {
-        if (currentPlayer.choice === 0) {
+        if (currentPlayer.choice === PlayerChoice.Turn) {
             setIsThinking(true);
         } else {
             setIsThinking(false);

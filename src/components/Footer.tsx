@@ -17,18 +17,10 @@ const PokerActionPanel: React.FC = () => {
     const setBalance2 = () => {
         setPlayerPot(3, 2);
     };
-
-    // useEffect(() => {
-    //     const intervalId = setInterval(() => {
-    //         handleChoiceChange(0, 1);
-    //     }, Math.floor(Math.random() * 11) * 1000); // Random delay between 0 and 30 seconds
-
-    //     // Clean up the interval when the component is unmounted
-    //     return () => clearInterval(intervalId);
-    // }, []);
+    console.log(`CURRENT PALYER INDEX: `, currentPlayerIndex)
 
     const start = () => {
-        handleChoiceChange(1, 1);
+        handleChoiceChange(currentPlayerIndex, 1, players);
     };
 
     return (

@@ -3,6 +3,13 @@ import Badge from "../Badge/Badge";
 import ProgressBar from "../AutoProgressBar/AutoProgressBar";
 import { usePlayerContext } from "../../../context/usePlayerContext";
 
+export enum PlayerChoice {
+    Idle = 0,
+    Turn = 1,
+    Fold = 2,
+    AllIn = 3
+}
+
 type OppositePlayerProps = {
     left?: string; // Front side image source
     top?: string; // Back side image source
@@ -17,7 +24,7 @@ const OppositePlayer: React.FC<OppositePlayerProps> = ({ left, top, index, color
     return (
         <div
             key={index}
-            className={`${players[index].choice && players[index].choice === 1 ? "opacity-60" : ""}  absolute flex flex-col justify-center text-gray-600 w-[150px] h-[140px] mt-[40px] transform -translate-x-1/2 -translate-y-1/2`}
+            className={`${players[index].choice && players[index].choice === PlayerChoice.Fold ? "opacity-60" : ""}  absolute flex flex-col justify-center text-gray-600 w-[150px] h-[140px] mt-[40px] transform -translate-x-1/2 -translate-y-1/2`}
             style={{
                 left: left,
                 top: top
@@ -35,7 +42,7 @@ const OppositePlayer: React.FC<OppositePlayerProps> = ({ left, top, index, color
                 >
                     {/* <p className="text-white font-bold text-sm mt-auto mb-1.5 self-center">+100</p> */}
                     <ProgressBar index={index} />
-                    {players[index].choice && players[index].choice === 1 ?
+                    {players[index].choice && players[index].choice === PlayerChoice.Fold ?
                         <span className="text-white animate-progress delay-2000 flex items-center w-full h-2 mb-2 mt-auto gap-2 flex justify-center">FOLD</span> :
                         <></>
                     }

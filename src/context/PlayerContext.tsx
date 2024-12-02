@@ -1,14 +1,21 @@
 import React, { createContext, useState, ReactNode, useEffect } from "react";
 import { Player, PlayerContextType } from "./types";
 
+export enum PlayerChoice {
+    Idle = 0,
+    Turn = 1,
+    Fold = 2,
+    AllIn = 3
+}
+
 export const PlayerContext = createContext<PlayerContextType | undefined>(undefined);
 
 export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [players, setPlayers] = useState<Player[]>(
         Array.from({ length: 9 }, (_, index) => ({
             index,
-            balance: 2,
-            choice: -1, //? thinking - 0, fold - 1
+            balance: 200,
+            choice: PlayerChoice.Idle, //? thinking - 0, fold - 1
             pot: 0,
             place: index + 1
         }))
@@ -25,8 +32,11 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     };
 
     const initialStart = (index: number) => {
+        console.log("GAME START")
         const updatedPlayers = [...players];
-        updatedPlayers[index] = { ...updatedPlayers[index], choice: 0 };
+        updatedPlayers[index] = { ...updatedPlayers[index], choice: PlayerChoice.Turn };
+        updatedPlayers[7] = { ...updatedPlayers[7], pot: 2 };
+        updatedPlayers[8] = { ...updatedPlayers[8], pot: 4 };
         setPlayers(updatedPlayers);
 
         // Clear any existing timer to avoid overlap
@@ -41,12 +51,16 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
     const startThinking = (index: number, updatedPlayers: Player[]) => {
         console.log("START!!!!!", index, players)
-        updatedPlayers[index] = { ...updatedPlayers[index], choice: 0 };
+
+        if (timer) {
+            clearTimeout(timer);
+            setTimer(null);
+        }
+
+        updatedPlayers[index] = { ...updatedPlayers[index], choice: PlayerChoice.Turn };
         console.log(updatedPlayers)
         setPlayers(updatedPlayers);
 
-        // Clear any existing timer to avoid overlap
-        if (timer) clearTimeout(timer);
         console.log(`current:`, currentPlayerIndex, "index: ", index)
         // Start a 30-second timer for the current player
         const newTimer = setTimeout(() => {
@@ -56,22 +70,23 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         setTimer(newTimer);
     };
 
-    const handleChoiceChange = (index: number, newChoice: number) => {
-        const updatedPlayers = [...players];
+    const handleChoiceChange = (index: number, newChoice: number, updatedPlayers: Player[]) => {
         console.log(`newChoice:`, newChoice)
+        // Clear the current timer
+        if (timer) {
+            clearTimeout(timer);
+            setTimer(null);
+        }
+
         // Update the player's choice
         updatedPlayers[index] = { ...updatedPlayers[index], choice: newChoice };
         console.log(updatedPlayers)
         // Immediately update state 
         setPlayers(updatedPlayers);
         console.log(index, currentPlayerIndex)
-        if (index === currentPlayerIndex) {
-            // Clear the current timer
-            if (timer) clearTimeout(timer);
 
-            // Move to the next player if the current player made a choice
-            moveToNextPlayer(index, updatedPlayers);
-        }
+        // Move to the next player if the current player made a choice
+        moveToNextPlayer(index, updatedPlayers);
     };
 
     const moveToNextPlayer = (index: number, updatedPlayers: Player[]) => {
@@ -86,7 +101,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         console.log(`beforemove`, updatedPlayers[index])
         updatedPlayers[index] = {
             ...updatedPlayers[index],
-            choice: 1,
+            choice: PlayerChoice.Fold,
         };
         console.log(updatedPlayers)
 
@@ -112,7 +127,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         setPlayers(prev =>
             prev.map(player =>
                 player.index === index
-                    ? { ...player, balance: balance, choice: balance === 0 ? 1 : player.choice } // Automatically set "fold" if balance is 0
+                    ? { ...player, balance: balance, choice: balance === 0 ? PlayerChoice.Fold : player.choice } // Automatically set "fold" if balance is 0
                     : player
             )
         );
@@ -140,7 +155,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         // Fold the current player
         updatedPlayers[currentPlayerIndex] = {
             ...updatedPlayers[currentPlayerIndex],
-            choice: 1
+            choice: PlayerChoice.Fold
         };
 
         // Move to the next player
@@ -160,7 +175,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         // Set the next player to "thinking"
         updatedPlayers[nextIndex] = {
             ...updatedPlayers[nextIndex],
-            choice: 0
+            choice: PlayerChoice.Turn
         };
 
         // Update state

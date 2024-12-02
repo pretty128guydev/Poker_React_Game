@@ -250,8 +250,8 @@ function PlayPage() {
                                     {/*//! Dealer */}
                                     <div
                                         style={{
-                                            top: dealerPositionArray[currentDealerIndex]?.top,
-                                            left: dealerPositionArray[currentDealerIndex]?.left,
+                                            top: dealerPositionArray[6]?.top,
+                                            left: dealerPositionArray[6]?.left,
                                             transition: "top 1s ease, left 1s ease"
                                         }}
                                         className="absolute"
