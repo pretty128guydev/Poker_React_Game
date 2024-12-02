@@ -4,15 +4,10 @@ import "./HandCard.css";
 type HandCardProps = {
     frontSrc: string; // Front side image source
     backSrc: string; // Back side image source
+    flipped: boolean
 };
 
-const HandCard: React.FC<HandCardProps> = ({ frontSrc, backSrc }) => {
-    const [flipped, setFlipped] = useState(false);
-
-    //!Clickable
-    const handleClick = () => {
-        setFlipped(!flipped); // Toggle flip state on click
-    };
+const HandCard: React.FC<HandCardProps> = ({ frontSrc, backSrc, flipped }) => {
 
     // useEffect(() => {
     //     // Trigger flip on component mount (initial render)
@@ -25,7 +20,7 @@ const HandCard: React.FC<HandCardProps> = ({ frontSrc, backSrc }) => {
 
     return (
         // !Clickable
-        <div className={`handcard ${flipped ? "" : "flipped"}`} onClick={handleClick}>
+        <div className={`handcard ${flipped ? "" : "flipped"}`}>
             {/* <div className={`card ${flipped ? "" : "flipped"}`}> */}
             <div className="handcard-inner">
                 <div className="handcard-front">

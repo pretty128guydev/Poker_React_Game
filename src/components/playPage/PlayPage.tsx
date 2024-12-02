@@ -41,6 +41,26 @@ function PlayPage() {
     const [chipPositionArray, setChipPositionArray] = useState<PositionArray[]>([]);
     const [dealerPositionArray, setDealerPositionArray] = useState<PositionArray[]>([]);
     const [zoom, setZoom] = useState(calculateZoom());
+    const [flipped1, setFlipped1] = useState(false);
+    const [flipped2, setFlipped2] = useState(false);
+    const [flipped3, setFlipped3] = useState(false);
+
+    function threeCardsTable() {
+        setTimeout(() => {
+            setFlipped1(true)
+        }, 1000);
+        setTimeout(() => {
+            setFlipped2(true)
+        }, 1100);
+        setTimeout(() => {
+            setFlipped3(true)
+        }, 1200);
+    }
+
+    useEffect(() => {
+        threeCardsTable();
+    }, [])
+
 
     const { players, updatePlayer, currentDealerIndex } = usePlayerContext();
     const playerChoices = players.map(player => player.choice);
@@ -165,59 +185,43 @@ function PlayPage() {
                                                 </span>
                                             </div>
                                             <div className="w-[130px] h-[21px] rounded-full bg-[#00000054] flex align-center justify-center mt-2">
-                                                <span className="text-[#dbd3d3] mr-2">Main Pot: 10</span>
+                                                <span className="text-[#dbd3d3] mr-2">Main Pot: 50</span>
                                             </div>
                                             <div className="flex gap-2 mt-8">
                                                 <div className="card animate-fall delay-200">
-                                                    <Card frontSrc={`/cards/${getRandomCard()}.svg`} backSrc="/cards/back.svg" />
+                                                    <Card frontSrc={`/cards/${getRandomCard()}.svg`} backSrc="/cards/back.svg" flipped={flipped1} />
                                                 </div>
                                                 <div className="card animate-fall delay-400">
-                                                    <Card frontSrc={`/cards/${getRandomCard()}.svg`} backSrc="/cards/back.svg" />
+                                                    <Card frontSrc={`/cards/${getRandomCard()}.svg`} backSrc="/cards/back.svg" flipped={flipped2} />
                                                 </div>
                                                 <div className="card animate-fall delay-600">
-                                                    <Card frontSrc={`/cards/${getRandomCard()}.svg`} backSrc="/cards/back.svg" />
+                                                    <Card frontSrc={`/cards/${getRandomCard()}.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
                                                 </div>
                                                 <div className="w-[100px] h-[137px] aspect-square border-[0.5px] border-dashed border-white rounded-[5px]"></div>
                                                 <div className="w-[100px] h-[137px] aspect-square border-[0.5px] border-dashed border-white rounded-[5px]"></div>
                                             </div>
-                                            {/* //! Chip */}
-                                            <div
-                                                style={{
-                                                    left: chipPositionArray[currentDealer]?.left,
-                                                    bottom: chipPositionArray[currentDealer]?.bottom,
-                                                    transition: "bottom 1s ease, left 1s ease"
-                                                }}
-                                                className="absolute"
-                                            >
-                                                <Chip amount={100} />
-                                            </div>
-                                            <div
-                                                style={{
-                                                    left: chipPositionArray[currentDealer + 3]?.left,
-                                                    bottom: chipPositionArray[currentDealer + 3]?.bottom,
-                                                    transition: "bottom 1s ease, left 1s ease"
-                                                }}
-                                                className="absolute"
-                                            >
-                                                <Chip amount={28} />
-                                            </div>
-                                            <div
-                                                style={{
-                                                    left: chipPositionArray[currentDealer + 1]?.left,
-                                                    bottom: chipPositionArray[currentDealer + 1]?.bottom,
-                                                    transition: "bottom 1s ease, left 1s ease"
-                                                }}
-                                                className="absolute"
-                                            >
-                                                <Chip amount={10} />
-                                            </div>
+                                            {/*//! CHIP */}
+                                            {chipPositionArray.map((position, index) => {
+                                                return (
+                                                    <div
+                                                        key={index} // Make sure to add a unique key
+                                                        style={{
+                                                            left: position.left,
+                                                            bottom: position.bottom,
+                                                        }}
+                                                        className="absolute"
+                                                    >
+                                                        <Chip amount={players[index].pot} />
+                                                    </div>
+                                                );
+                                            })}
                                         </div>
                                     </div>
                                     {playerPositionArray.map((position, index) => (
                                         <>
-                                            {index == 2 || index == 4 ? (
+                                            {index == 10 ? (
                                                 <VacantPlayer key={`vacant-${index}-${position.left}`} index={index} left={position.left} top={position.top} />
-                                            ) : index != 8 ? (
+                                            ) : index != 0 ? (
                                                 <OppositePlayer
                                                     key={`opposite-${index}-${position.color}`}
                                                     index={index}

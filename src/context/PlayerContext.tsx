@@ -7,8 +7,8 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     const [players, setPlayers] = useState<Player[]>(
         Array.from({ length: 9 }, (_, index) => ({
             index,
-            balance: 0,
-            choice: "",
+            balance: 2,
+            choice: -1, //? thinking - 0, fold - 1
             pot: 0,
             place: index + 1
         }))
@@ -16,82 +16,108 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
     const [currentPlayerIndex, setCurrentPlayerIndex] = useState<number>(0);
     const [currentDealerIndex, setCurrentDealerIndex] = useState<number>(0);
-    const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
+    const [timer, setTimer] = useState<NodeJS.Timeout | null>(null); const [isTransitioning, setIsTransitioning] = useState(false);
 
     // Function to update player details
     const updatePlayer = (index: number, updatedPlayer: Player) => {
         setPlayers(prev => prev.map(player => (player.index === index ? updatedPlayer : player)));
+        console.log(updatePlayer)
     };
 
-    // Start thinking for the current player
     const startThinking = (index: number) => {
+        console.log("START!!!!!", index, players)
         const updatedPlayers = [...players];
-        updatedPlayers[index] = { ...updatedPlayers[index], choice: "thinking" };
-
+        updatedPlayers[index] = { ...updatedPlayers[index], choice: 0 };
+        console.log(updatedPlayers)
         setPlayers(updatedPlayers);
 
-        // Start a 30-second timer for the current player
+        // Clear any existing timer to avoid overlap
         if (timer) clearTimeout(timer);
 
+        // Start a 30-second timer for the current player
         const newTimer = setTimeout(() => {
             // Ensure the timeout only executes if this is still the current player
             if (index === currentPlayerIndex) {
-                // Ensure the player has not been set to fold (balance 0) during the timeout
-                if (updatedPlayers[index].balance > 0) {
-                    updatedPlayers[index] = { ...updatedPlayers[index], choice: "fold" };
-                    setPlayers(updatedPlayers); // Make sure the state is updated after the timeout
-                    moveToNextPlayer();
-                }
+                moveToNextPlayer(index);
             }
         }, 30000); // 30 seconds
         setTimer(newTimer);
     };
 
-    // Function to move to the next player
-    const moveToNextPlayer = () => {
+    const handleChoiceChange = (index: number, newChoice: number) => {
+        const updatedPlayers = [...players];
+        console.log(`newChoice:`, newChoice)
+        // Update the player's choice
+        updatedPlayers[index] = { ...updatedPlayers[index], choice: newChoice };
+        console.log(updatedPlayers)
+        // Immediately update state 
+        setPlayers(updatedPlayers);
+        console.log(index, currentPlayerIndex)
+        if (index === currentPlayerIndex) {
+            // Clear the current timer
+            if (timer) clearTimeout(timer);
+
+            // Move to the next player if the current player made a choice
+            moveToNextPlayer(index);
+        }
+    };
+
+    const moveToNextPlayer = (index: number) => {
+        console.log("MoveToNextPlayer")
+        // Clear the timer for the current player
         if (timer) {
             clearTimeout(timer);
-            setTimer(null); // Clear the timer
+            setTimer(null); // Reset the timer
         }
 
         const updatedPlayers = [...players];
-
-        // Set current player's choice to "fold"
-        updatedPlayers[currentPlayerIndex] = {
-            ...updatedPlayers[currentPlayerIndex],
-            choice: "fold"
+        console.log(index)
+        console.log(`beforemove`, updatedPlayers[index])
+        updatedPlayers[index] = {
+            ...updatedPlayers[index],
+            choice: updatedPlayers[index].choice === 0 ? 1 : updatedPlayers[index].choice,
         };
+        console.log(updatedPlayers)
 
-        let nextIndex = (currentPlayerIndex + 1) % updatedPlayers.length;
-
-        // Find the next eligible player
-        let attempts = 0; // Safety mechanism to avoid infinite loops
+        let nextIndex = (index + 1) % updatedPlayers.length;
+        let attempts = 0;
         while (updatedPlayers[nextIndex].balance === 0 && attempts < updatedPlayers.length) {
             nextIndex = (nextIndex + 1) % updatedPlayers.length;
             attempts++;
         }
-
+        console.log(nextIndex)
         if (attempts === updatedPlayers.length) {
             console.error("No eligible players with a non-zero balance!");
             return; // Exit if all players have balance 0
         }
 
-        // Set the next player's choice to "thinking"
         updatedPlayers[nextIndex] = {
             ...updatedPlayers[nextIndex],
-            choice: "thinking"
+            choice: 0,
         };
 
-        // Update state
         setPlayers(updatedPlayers);
         setCurrentPlayerIndex(nextIndex);
+
+        startThinking(nextIndex);
     };
 
     const setPlayerBalance = (index: number, balance: number) => {
         setPlayers(prev =>
             prev.map(player =>
                 player.index === index
-                    ? { ...player, balance: balance, choice: balance === 0 ? "fold" : player.choice } // Automatically set "fold" if balance is 0
+                    ? { ...player, balance: balance, choice: balance === 0 ? 1 : player.choice } // Automatically set "fold" if balance is 0
+                    : player
+            )
+        );
+    };
+
+
+    const setPlayerPot = (index: number, pot: number) => {
+        setPlayers(prev =>
+            prev.map(player =>
+                player.index === index
+                    ? { ...player, pot: pot } // Automatically set "fold" if pot is 0
                     : player
             )
         );
@@ -108,7 +134,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         // Fold the current player
         updatedPlayers[currentPlayerIndex] = {
             ...updatedPlayers[currentPlayerIndex],
-            choice: "fold"
+            choice: 1
         };
 
         // Move to the next player
@@ -128,7 +154,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         // Set the next player to "thinking"
         updatedPlayers[nextIndex] = {
             ...updatedPlayers[nextIndex],
-            choice: "thinking"
+            choice: 0
         };
 
         // Update state
@@ -136,7 +162,6 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         setCurrentPlayerIndex(nextIndex);
     };
 
-    // Start the thinking process when the game starts
     useEffect(() => {
         startThinking(currentPlayerIndex);
     }, [currentPlayerIndex]);
@@ -149,7 +174,10 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
                 currentDealerIndex,
                 moveToNextPlayer,
                 setPlayerBalance,
-                changeToThinkingBeforeTimeout
+                changeToThinkingBeforeTimeout,
+                setPlayerPot,
+                handleChoiceChange,
+                currentPlayerIndex
             }}
         >
             {children}

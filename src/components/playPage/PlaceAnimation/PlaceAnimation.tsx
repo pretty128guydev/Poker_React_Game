@@ -14,8 +14,7 @@ const PlaceAnimation: React.FC<PlaceAnimationProps> = ({ left, top, index }) => 
     const currentPlayer = players[index];
 
     useEffect(() => {
-        console.log(currentPlayer);
-        if (currentPlayer.choice === "thinking") {
+        if (currentPlayer.choice === 0) {
             setIsThinking(true);
         } else {
             setIsThinking(false);

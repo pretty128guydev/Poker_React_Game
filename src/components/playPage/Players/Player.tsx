@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Badge from "../Badge/Badge";
 import ProgressBar from "../AutoProgressBar/AutoProgressBar";
 import HandCard from "./HandCard";
+import { usePlayerContext } from "../../../context/usePlayerContext";
 
 type PlayerProps = {
     left?: string; // Front side image source
@@ -9,7 +10,7 @@ type PlayerProps = {
     index: number;
     currentIndex: number;
     color?: string;
-    choice?: string;
+    choice?: number;
 };
 
 //* Get Randome Card
@@ -22,18 +23,30 @@ function getRandomCard() {
 }
 
 const Player: React.FC<PlayerProps> = ({ left, top, index, color, currentIndex, choice }) => {
+    const [flipped1, setFlipped1] = useState(false);
+    const [flipped2, setFlipped2] = useState(false);
+    const { players, updatePlayer, currentDealerIndex } = usePlayerContext();
+
+    useEffect(() => {
+        setFlipped1(true)
+        setTimeout(() => {
+            setFlipped2(true)
+        }, 500);
+    }, [])
+
     return (
         <div
             key={index}
-            className="absolute flex flex-col justify-center text-gray-600 w-[150px] h-[140px] mt-[40px] transform -translate-x-1/2 -translate-y-1/2"
+            className={`${players[index].choice && players[index].choice === 1 ? "opacity-60" : ""} absolute flex flex-col justify-center text-gray-600 w-[150px] h-[140px] mt-[40px] transform -translate-x-1/2 -translate-y-1/2`}
+
             style={{
                 left: left,
                 top: top
             }}
         >
             <div className="flex justify-center gap-1">
-                <HandCard frontSrc={`/cards/1A.svg`} backSrc="/cards/back.svg" />
-                <HandCard frontSrc={`/cards/1C.svg`} backSrc="/cards/back.svg" />
+                <HandCard frontSrc={`/cards/1A.svg`} backSrc="/cards/back.svg" flipped={flipped1} />
+                <HandCard frontSrc={`/cards/1C.svg`} backSrc="/cards/back.svg" flipped={flipped2} />
             </div>
             <div className="relative flex flex-col justify-end mt-[-6px] mx-1s">
                 <div
@@ -42,12 +55,16 @@ const Player: React.FC<PlayerProps> = ({ left, top, index, color, currentIndex, 
                 >
                     {/* <p className="text-white font-bold text-sm mt-auto mb-1.5 self-center">+100</p> */}
                     <ProgressBar index={index} />
+                    {players[index].choice && players[index].choice === 1 ?
+                        <span className="text-white animate-progress delay-2000 flex items-center w-full h-2 mb-2 mt-auto gap-2 flex justify-center">FOLD</span> :
+                        <></>
+                    }
                 </div>
                 <div className="absolute top-[0%] w-full">
-                    <Badge count={index + 1} value={128} color={color} />
+                    <Badge count={index + 1} value={players[index].balance} color={color} />
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

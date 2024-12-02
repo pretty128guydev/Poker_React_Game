@@ -1,25 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { usePlayerContext } from "../context/usePlayerContext";
 
 const PokerActionPanel: React.FC = () => {
     const [raiseAmount, setRaiseAmount] = useState(24);
-    const { players, changeToThinkingBeforeTimeout, setPlayerBalance } = usePlayerContext();
+    const { players, changeToThinkingBeforeTimeout, setPlayerBalance, setPlayerPot, currentPlayerIndex, handleChoiceChange } = usePlayerContext();
 
     const handleRaiseChange = (newAmount: number) => {
         setRaiseAmount(newAmount);
     };
 
     const setBalance1 = () => {
-        setPlayerBalance(3, 1000);
+        setPlayerBalance(3, 44);
         console.log(players);
     };
 
     const setBalance2 = () => {
-        setPlayerBalance(3, 0);
+        setPlayerPot(3, 2);
     };
 
+    // useEffect(() => {
+    //     const intervalId = setInterval(() => {
+    //         handleChoiceChange(0, 1);
+    //     }, Math.floor(Math.random() * 11) * 1000); // Random delay between 0 and 30 seconds
+
+    //     // Clean up the interval when the component is unmounted
+    //     return () => clearInterval(intervalId);
+    // }, []);
+
     const start = () => {
-        changeToThinkingBeforeTimeout();
+        handleChoiceChange(1, 1);
     };
 
     return (
