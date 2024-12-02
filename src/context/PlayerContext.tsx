@@ -254,6 +254,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     const contextValue = useMemo(
         () => ({
             players,
+            lastPot,
             tableSize,
             playerIndex,
             dealerIndex,
@@ -261,7 +262,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             openTwoMore,
             setPlayerAction
         }),
-        [players, tableSize, playerIndex, dealerIndex, openOneMore, openTwoMore, fold, raise, check, setPlayerAction]
+        [players, tableSize, playerIndex, dealerIndex, openOneMore, openTwoMore, lastPot, fold, raise, check, setPlayerAction]
     );
 
     return <PlayerContext.Provider value={contextValue}>{children}</PlayerContext.Provider>;

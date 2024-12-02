@@ -25,6 +25,7 @@ export interface PlayerContextType {
     // changeToThinkingBeforeTimeout: () => void;
     setPlayerAction: (action: 'fold' | 'check' | 'raise', amount?: number) => void;
     dealerIndex: number;
+    lastPot: number;
     playerIndex: number;
     openOneMore: boolean;
     openTwoMore: boolean;

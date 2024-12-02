@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import { usePlayerContext } from "../context/usePlayerContext";
 
 const PokerActionPanel: React.FC = () => {
-    const [raiseAmount, setRaiseAmount] = useState(24);
-    const { setPlayerAction, playerIndex, players } = usePlayerContext();
+    const { setPlayerAction, playerIndex, players, lastPot } = usePlayerContext();
+    const [raiseAmount, setRaiseAmount] = useState(0);
+    useEffect(() => {
+        setRaiseAmount(lastPot)
+    }, [lastPot])
     const balance = players[0]?.balance
     const handleRaiseChange = (newAmount: number) => {
         setRaiseAmount(newAmount);
@@ -58,7 +61,7 @@ const PokerActionPanel: React.FC = () => {
                 <button className="bg-[#0c0c0c80] hover:bg-[#0c0c0c] px-2 py-2 rounded-lg w-full border-[1px] border-gray-400" onClick={() => setRaiseAmount(balance / 4)}>1 / 4 Pot</button>
                 <button className="bg-[#0c0c0c80] hover:bg-[#0c0c0c] px-2 py-2 rounded-lg w-full border-[1px] border-gray-400" onClick={() => setRaiseAmount(balance / 2)}>1 / 2 Pot</button>
                 <button className="bg-[#0c0c0c80] hover:bg-[#0c0c0c] px-2 py-2 rounded-lg w-full border-[1px] border-gray-400" onClick={() => setRaiseAmount(balance / 4 * 3)}>3 / 4 Pot</button>
-                <button className="bg-[#0c0c0c80] hover:bg-[#0c0c0c] px-2 py-2 rounded-lg w-full border-[1px] border-gray-400" onClick={() => setRaiseAmount(1)}>Pot</button>
+                <button className="bg-[#0c0c0c80] hover:bg-[#0c0c0c] px-2 py-2 rounded-lg w-full border-[1px] border-gray-400" onClick={() => setRaiseAmount(lastPot + 1)}>Pot</button>
                 <button className="bg-[#0c0c0c80] hover:bg-[#0c0c0c] px-2 py-2 rounded-lg w-full border-[1px] border-gray-400" onClick={() => setRaiseAmount(balance)}>ALL-IN</button>
             </div>
         </div>
