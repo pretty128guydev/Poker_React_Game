@@ -180,7 +180,7 @@ export const dealerPosition = {
     nine: [
         {
             // 1
-            left: "310px",
+            left: "300px",
             top: "340px"
         },
         {

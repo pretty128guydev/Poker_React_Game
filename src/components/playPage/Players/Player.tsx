@@ -50,8 +50,8 @@ const Player: React.FC<PlayerProps> = ({ left, top, index, color }) => {
             }}
         >
             <div className="flex justify-center gap-1">
-                <img src={`/cards/1A.svg`} width={60} height={80} />
-                <img src={`/cards/1C.svg`} width={60} height={80} />
+                <img src={`/cards/7A.svg`} width={60} height={80} />
+                <img src={`/cards/9C.svg`} width={60} height={80} />
                 {/* <HandCard frontSrc={`/cards/1A.svg`} backSrc="/cards/back.svg" flipped={flipped1} />
                 <HandCard frontSrc={`/cards/1C.svg`} backSrc="/cards/back.svg" flipped={flipped2} /> */}
             </div>

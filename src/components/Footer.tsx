@@ -4,10 +4,12 @@ import { usePlayerContext } from "../context/usePlayerContext";
 const PokerActionPanel: React.FC = () => {
     const { setPlayerAction, playerIndex, players, lastPot } = usePlayerContext();
     const [raiseAmount, setRaiseAmount] = useState(0);
-    useEffect(() => {
-        setRaiseAmount(lastPot)
-    }, [lastPot])
     const balance = players[0]?.balance
+    const pot = players[0]?.pot
+    useEffect(() => {
+        setRaiseAmount(lastPot - pot + 1)
+    }, [lastPot])
+
     const handleRaiseChange = (newAmount: number) => {
         setRaiseAmount(newAmount);
     };
@@ -35,7 +37,7 @@ const PokerActionPanel: React.FC = () => {
                     CHECK
                 </button>
                 <button disabled={playerIndex !== 0} className="cursor-pointer bg-[#0c0c0c80] hover:bg-[#0c0c0c] px-4 py-2 rounded-lg w-full border-[1px] border-gray-400" onClick={onRaise}>
-                    {raiseAmount == balance ? "All-IN" : `RAISE TO ${raiseAmount}`}
+                    {raiseAmount == balance ? "All-IN" : `RAISE ${raiseAmount}`}
                 </button>
             </div>
 

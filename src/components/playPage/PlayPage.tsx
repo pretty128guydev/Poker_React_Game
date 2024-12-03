@@ -177,16 +177,16 @@ function PlayPage() {
                                                     <Card frontSrc={`/cards/10B.svg`} backSrc="/cards/back.svg" flipped={flipped1} />
                                                 </div>
                                                 <div className="card animate-fall delay-400">
-                                                    <Card frontSrc={`/cards/JB.svg`} backSrc="/cards/back.svg" flipped={flipped2} />
+                                                    <Card frontSrc={`/cards/JD.svg`} backSrc="/cards/back.svg" flipped={flipped2} />
                                                 </div>
                                                 <div className="card animate-fall delay-600">
-                                                    <Card frontSrc={`/cards/QB.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
+                                                    <Card frontSrc={`/cards/8B.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
                                                 </div>
                                                 {openOneMore ? <div className="card animate-fall delay-600">
-                                                    <Card frontSrc={`/cards/KB.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
+                                                    <Card frontSrc={`/cards/6B.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
                                                 </div> : <div className="w-[100px] h-[137px] aspect-square border-[0.5px] border-dashed border-white rounded-[5px]"></div>}
                                                 {openTwoMore ? <div className="card animate-fall delay-600">
-                                                    <Card frontSrc={`/cards/1B.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
+                                                    <Card frontSrc={`/cards/8A.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
                                                 </div> : <div className="w-[100px] h-[137px] aspect-square border-[0.5px] border-dashed border-white rounded-[5px]"></div>}
                                             </div>
                                             {/*//! CHIP */}

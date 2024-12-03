@@ -172,8 +172,8 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             updatedPlayers[playerIndex].balance = 0;
         } else {
             updatedPlayers[playerIndex].status = PlayerStatus.Idle;
-            updatedPlayers[playerIndex].balance -= (lastPot + amount - updatedPlayers[playerIndex].pot);
-            updatedPlayers[playerIndex].pot = lastPot + amount;
+            updatedPlayers[playerIndex].balance -= amount;
+            updatedPlayers[playerIndex].pot += amount;
         }
         setLastPot(updatedPlayers[playerIndex].pot)
         if (!players[nextPlayerIndex]) {
