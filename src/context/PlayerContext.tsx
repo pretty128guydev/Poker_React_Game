@@ -27,8 +27,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     // };
 
     const nextPlayer = (turn: number, amount: number) => {
-
-        console.log(`NEXT`, turn, amount, players)
+        console.log(`NEXT`, turn, amount, players);
         const allIdle = players.every(player => player.status !== PlayerStatus.Idle);
         if (allIdle) {
             console.warn("All players are not idle. Resetting players.");
@@ -76,16 +75,16 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         if (!players[nextPlayerIndex]) {
             console.error(`Player at index ${nextPlayerIndex} does not exist.`);
             let allPot = 0;
-            players.map((player) => {
-                allPot += player.pot
-            })
+            players.map(player => {
+                allPot += player.pot;
+            });
             updatedPlayers[playerIndex].balance += allPot;
             players.map((player, index) => {
                 if (index !== playerIndex) {
-                    updatedPlayers[playerIndex].status -= PlayerStatus.Idle;
+                    updatedPlayers[playerIndex].status = PlayerStatus.Idle;
                 }
                 updatedPlayers[playerIndex].pot = 0;
-            })
+            });
             return true;
         }
         updatedPlayers[nextPlayerIndex].status = PlayerStatus.Turn;
@@ -105,10 +104,10 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         let updatedPlayers = players;
         const nextPlayerIndex = nextPlayer(playerIndex, 1);
         const checkPot = lastPot - updatedPlayers[playerIndex].pot;
-        console.log(`POT, LASTPOT`, updatedPlayers[playerIndex].pot, lastPot)
+        console.log(`POT, LASTPOT`, updatedPlayers[playerIndex].pot, lastPot);
         if (updatedPlayers[playerIndex].pot == lastPot) {
             if (openOneMore) {
-                setOpenTwoMore(true)
+                setOpenTwoMore(true);
             } else {
                 setOpenOneMore(true);
             }
@@ -126,16 +125,16 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         if (!players[nextPlayerIndex]) {
             console.error(`Player at index ${nextPlayerIndex} does not exist.`);
             let allPot = 0;
-            players.map((player) => {
-                allPot += player.pot
-            })
+            players.map(player => {
+                allPot += player.pot;
+            });
             updatedPlayers[playerIndex].balance += allPot;
             players.map((player, index) => {
                 if (index !== playerIndex) {
-                    updatedPlayers[playerIndex].status -= PlayerStatus.Idle;
+                    updatedPlayers[playerIndex].status = PlayerStatus.Idle;
                 }
                 updatedPlayers[playerIndex].pot = 0;
-            })
+            });
             return true;
         }
         updatedPlayers[nextPlayerIndex].status = PlayerStatus.Turn;
@@ -175,20 +174,22 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             updatedPlayers[playerIndex].balance -= amount;
             updatedPlayers[playerIndex].pot += amount;
         }
-        setLastPot(updatedPlayers[playerIndex].pot)
+
+        setLastPot(updatedPlayers[playerIndex].pot);
+
         if (!players[nextPlayerIndex]) {
             console.error(`Player at index ${nextPlayerIndex} does not exist.`);
             let allPot = 0;
-            players.map((player) => {
-                allPot += player.pot
-            })
+            players.map(player => {
+                allPot += player.pot;
+            });
             updatedPlayers[playerIndex].balance += allPot;
             players.map((player, index) => {
                 if (index !== playerIndex) {
-                    updatedPlayers[playerIndex].status -= PlayerStatus.Idle;
+                    updatedPlayers[playerIndex].status = PlayerStatus.Idle;
                 }
                 updatedPlayers[playerIndex].pot = 0;
-            })
+            });
             return true;
         }
         updatedPlayers[nextPlayerIndex].status = PlayerStatus.Turn;
@@ -240,13 +241,12 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         }
     }, []);
 
-    const setPlayerAction = (action: 'fold' | 'check' | 'raise', amount?: number) => {
-
-        if (action === 'fold') {
+    const setPlayerAction = (action: "fold" | "check" | "raise", amount?: number) => {
+        if (action === "fold") {
             fold();
-        } else if (action === 'check') {
+        } else if (action === "check") {
             check();
-        } else if (action === 'raise' && amount !== undefined) {
+        } else if (action === "raise" && amount !== undefined) {
             raise(amount);
         }
     };
