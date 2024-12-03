@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { usePlayerContext } from "../../../context/usePlayerContext";
 import { PlayerStatus } from "../../../context/types";
 
-type PlaceAnimationProps = {
+type TurnAnimationProps = {
     top?: string; // CSS top position
     left?: string; // CSS left position
     index: number; // Index of the player
 };
 
-const PlaceAnimation: React.FC<PlaceAnimationProps> = ({ left, top, index }) => {
+const TurnAnimation: React.FC<TurnAnimationProps> = ({ left, top, index }) => {
     const { players } = usePlayerContext();
     const [isThinking, setIsThinking] = useState(false);
 
@@ -38,4 +38,4 @@ const PlaceAnimation: React.FC<PlaceAnimationProps> = ({ left, top, index }) => 
     );
 };
 
-export default PlaceAnimation;
+export default TurnAnimation;

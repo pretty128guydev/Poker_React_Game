@@ -1,20 +1,19 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { playerPosition, chipPosition, dealerPosition } from "../../utils/PositionArray";
 import { HiOutlinePlusCircle } from "react-icons/hi";
 import { IoMenuSharp } from "react-icons/io5";
 import { CiCalendar } from "react-icons/ci";
 import PokerActionPanel from "../Footer";
 import PokerLog from "../PokerLog";
-import Card from "./Card/Card";
+import OppositePlayerCards from "./Card/OppositePlayerCards";
 import VacantPlayer from "./Players/VacantPlayer";
 import OppositePlayer from "./Players/OppositePlayer";
 import Player from "./Players/Player";
-import Dealer from "./Dealer/Dealer";
-import Chip from "./Chip/Chip";
-import PlaceAnimation from "./PlaceAnimation/PlaceAnimation";
-import { PlayerContext } from "../../context/PlayerContext";
+import Dealer from "./reusable/Dealer";
+import Chip from "./reusable/Chip";
 import { usePlayerContext } from "../../context/usePlayerContext";
 import { PlayerStatus } from "../../context/types";
+import TurnAnimation from "./TurnAnimation/TurnAnimation";
 
 //* Define the interface for the position object
 interface PositionArray {
@@ -60,7 +59,6 @@ function PlayPage() {
     }, []);
 
     const { players, dealerIndex, tableSize, openOneMore, openTwoMore } = usePlayerContext();
-    const playerStatuses = players.map(player => player.status);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -90,15 +88,6 @@ function PlayPage() {
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
-
-    //* Get Randome Card
-    function getRandomCard() {
-        const ranks = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
-        const suits = ["A", "B", "C", "D"]; // Suits can be interpreted as Spades, Hearts, Clubs, Diamonds
-        const randomRank = ranks[Math.floor(Math.random() * ranks.length)];
-        const randomSuit = suits[Math.floor(Math.random() * suits.length)];
-        return randomRank + randomSuit;
-    }
 
     useEffect(() => {
         //* set the number of players
@@ -174,26 +163,26 @@ function PlayPage() {
                                             </div>
                                             <div className="flex gap-2 mt-8">
                                                 <div className="card animate-fall delay-200">
-                                                    <Card frontSrc={`/cards/10B.svg`} backSrc="/cards/back.svg" flipped={flipped1} />
+                                                    <OppositePlayerCards frontSrc={`/cards/10B.svg`} backSrc="/cards/back.svg" flipped={flipped1} />
                                                 </div>
                                                 <div className="card animate-fall delay-400">
-                                                    <Card frontSrc={`/cards/JD.svg`} backSrc="/cards/back.svg" flipped={flipped2} />
+                                                    <OppositePlayerCards frontSrc={`/cards/JD.svg`} backSrc="/cards/back.svg" flipped={flipped2} />
                                                 </div>
                                                 <div className="card animate-fall delay-600">
-                                                    <Card frontSrc={`/cards/8B.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
+                                                    <OppositePlayerCards frontSrc={`/cards/8B.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
                                                 </div>
                                                 {openOneMore ? <div className="card animate-fall delay-600">
-                                                    <Card frontSrc={`/cards/6B.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
+                                                    <OppositePlayerCards frontSrc={`/cards/6B.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
                                                 </div> : <div className="w-[100px] h-[137px] aspect-square border-[0.5px] border-dashed border-white rounded-[5px]"></div>}
                                                 {openTwoMore ? <div className="card animate-fall delay-600">
-                                                    <Card frontSrc={`/cards/8A.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
+                                                    <OppositePlayerCards frontSrc={`/cards/8A.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
                                                 </div> : <div className="w-[100px] h-[137px] aspect-square border-[0.5px] border-dashed border-white rounded-[5px]"></div>}
                                             </div>
                                             {/*//! CHIP */}
                                             {chipPositionArray.map((position, index) => {
                                                 return (
                                                     <div
-                                                        key={index} // Make sure to add a unique key
+                                                        key={`key-${index}`} // Make sure to add a unique key
                                                         style={{
                                                             left: position.left,
                                                             bottom: position.bottom
@@ -209,39 +198,36 @@ function PlayPage() {
                                     {playerPositionArray.map((position, index) => {
                                         const playerData = players[index];
                                         return (
-                                            <>
+                                            <div key={index}>
                                                 {playerData.status === PlayerStatus.SeatOff ? (
                                                     <VacantPlayer
-                                                        key={`vacant-${index}-${position.left}`}
                                                         index={index}
                                                         left={position.left}
                                                         top={position.top}
                                                     />
                                                 ) : index != 0 ? (
                                                     <OppositePlayer
-                                                        key={`opposite-${index}-${position.color}`}
                                                         index={index}
                                                         currentIndex={currentIndex}
                                                         left={position.left}
                                                         top={position.top}
                                                         color={position.color}
-                                                        status={playerStatuses[index]}
+                                                        status={players[index]?.status}
                                                     />
                                                 ) : (
                                                     <Player
-                                                        key={`mine-${index}-${playerStatuses[index]}`}
                                                         index={index}
                                                         currentIndex={currentIndex}
                                                         left={position.left}
                                                         top={position.top}
                                                         color={position.color}
-                                                        status={playerStatuses[index]}
+                                                        status={players[index]?.status}
                                                     />
                                                 )}
-                                                <div key={`animation-${index}`}>
-                                                    <PlaceAnimation left={position.left} top={position.top} index={index} />
+                                                <div>
+                                                    <TurnAnimation left={position.left} top={position.top} index={index} />
                                                 </div>
-                                            </>
+                                            </div>
                                         );
                                     })}
                                     {/*//! Dealer */}

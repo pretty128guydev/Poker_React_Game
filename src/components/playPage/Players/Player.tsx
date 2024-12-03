@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Badge from "../Badge/Badge";
-import ProgressBar from "../AutoProgressBar/AutoProgressBar";
-import HandCard from "./HandCard";
+import Badge from "../reusable/Badge";
+import ProgressBar from "../reusable/ProgressBar";
 import { usePlayerContext } from "../../../context/usePlayerContext";
 import { PlayerStatus } from "../../../context/types";
 
@@ -14,30 +13,8 @@ type PlayerProps = {
     status?: number;
 };
 
-//* Get Randome Card
-function getRandomCard() {
-    const ranks = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
-    const suits = ["A", "B", "C", "D"]; // Suits can be interpreted as Spades, Hearts, Clubs, Diamonds
-    const randomRank = ranks[Math.floor(Math.random() * ranks.length)];
-    const randomSuit = suits[Math.floor(Math.random() * suits.length)];
-    return randomRank + randomSuit;
-}
-
 const Player: React.FC<PlayerProps> = ({ left, top, index, color }) => {
-    const [flipped1, setFlipped1] = useState(false);
-    const [flipped2, setFlipped2] = useState(false);
     const { players } = usePlayerContext();
-
-    function cardOpen() {
-        setFlipped1(true);
-        setTimeout(() => {
-            setFlipped2(true);
-        }, 100);
-    }
-
-    useEffect(() => {
-        cardOpen();
-    }, []);
 
     return (
         <div

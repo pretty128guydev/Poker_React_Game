@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import "./Card.css";
+import React from "react";
+import "./OppositePlayerCards.css";
 
-type CardProps = {
+type OppositePlayerCardsProps = {
     frontSrc: string; // Front side image source
     backSrc: string; // Back side image source
     flipped: boolean
 };
 
-const Card: React.FC<CardProps> = ({ frontSrc, backSrc, flipped }) => {
+const OppositePlayerCards: React.FC<OppositePlayerCardsProps> = ({ frontSrc, backSrc, flipped }) => {
 
     return (
         // !Clickable
@@ -25,4 +25,4 @@ const Card: React.FC<CardProps> = ({ frontSrc, backSrc, flipped }) => {
     );
 };
 
-export default Card;
+export default OppositePlayerCards;

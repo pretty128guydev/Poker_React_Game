@@ -1,22 +1,13 @@
-import React, { useEffect, useState } from "react";
-import "./HandCard.css";
+import React from "react";
+import "./UserCards.css";
 
-type HandCardProps = {
+type UserCardsProps = {
     frontSrc: string; // Front side image source
     backSrc: string; // Back side image source
     flipped: boolean
 };
 
-const HandCard: React.FC<HandCardProps> = ({ frontSrc, backSrc, flipped }) => {
-
-    // useEffect(() => {
-    //     // Trigger flip on component mount (initial render)
-    //     const timer = setTimeout(() => {
-    //         setFlipped(true);
-    //     }, 100); // Slight delay to trigger the animation
-
-    //     return () => clearTimeout(timer);
-    // }, []);
+const UserCards: React.FC<UserCardsProps> = ({ frontSrc, backSrc, flipped }) => {
 
     return (
         // !Clickable
@@ -34,4 +25,4 @@ const HandCard: React.FC<HandCardProps> = ({ frontSrc, backSrc, flipped }) => {
     );
 };
 
-export default HandCard;
+export default UserCards;

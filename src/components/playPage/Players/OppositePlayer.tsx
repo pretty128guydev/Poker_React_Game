@@ -1,6 +1,6 @@
 import React from "react";
-import Badge from "../Badge/Badge";
-import ProgressBar from "../AutoProgressBar/AutoProgressBar";
+import Badge from "../reusable/Badge";
+import ProgressBar from "../reusable/ProgressBar";
 import { usePlayerContext } from "../../../context/usePlayerContext";
 import { PlayerStatus } from "../../../context/types";
 
