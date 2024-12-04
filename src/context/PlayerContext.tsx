@@ -1,4 +1,4 @@
-import React, { createContext, useState, ReactNode, useEffect, useMemo, useCallback, useRef } from "react";
+import React, { createContext, useState, ReactNode, useEffect, useMemo, useRef } from "react";
 import { Player, PlayerContextType, PlayerStatus } from "./types";
 
 export const PlayerContext = createContext<PlayerContextType | undefined>(undefined);
@@ -17,7 +17,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     const [openOneMore, setOpenOneMore] = useState<boolean>(false);
     const [openTwoMore, setOpenTwoMore] = useState<boolean>(false);
     const [showThreeCards, setShowThreeCards] = useState<boolean>(false);
-    const [tableSize, setTableSize] = useState<number>(9);
+    const [tableSize] = useState<number>(9);
     const [playerIndex, setPlayerIndex] = useState<number>(-1);
     const [dealerIndex, setDealerIndex] = useState<number>(0);
     const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);

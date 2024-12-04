@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { playerPosition, chipPosition, dealerPosition } from "../../utils/PositionArray";
-import { HiOutlinePlusCircle } from "react-icons/hi";
 import { IoMenuSharp } from "react-icons/io5";
 import { CiCalendar } from "react-icons/ci";
 import PokerActionPanel from "../Footer";
@@ -18,6 +17,7 @@ import { LuPanelLeftOpen } from "react-icons/lu";
 import { BiBorderAll } from "react-icons/bi";
 import { RiMoneyDollarCircleLine } from "react-icons/ri";
 import { LuPanelLeftClose } from "react-icons/lu";
+import { HiPlus } from "react-icons/hi2";
 //* Define the interface for the position object
 interface PositionArray {
     left?: string;
@@ -149,54 +149,54 @@ function PlayPage() {
         <div className="h-screen">
             {/*//! HEADER */}
             <div>
-                <div className="w-[100vw] h-[50px] bottom-0 bg-[#404040] top-5 text-center flex items-center justify-between border-b border-gray-400 px-4 z-0">
+                <div className="w-[100vw] h-[65px] bottom-0 bg-[#404040] top-5 text-center flex items-center justify-between border-gray-400 px-4 z-0">
                     <div className="flex items-center space-x-4">
-                        <div className="flex items-center justify-center w-8 h-8 bg-white rounded-full border-r border-white">
-                            <IoMenuSharp />
+                        <div className="flex items-center justify-center w-10 h-10 bg-white rounded-full border-r border-white">
+                            <IoMenuSharp size={20} />
                         </div>
-                        <span className="text-white text-sm font-medium">LOBBY</span>
+                        <span className="text-white text-sm font-medium text-[20px]">LOBBY</span>
                     </div>
 
                     {/* Middle Section */}
-                    <div className="flex items-center">
-                        <div className="w-24 h-12 border-l border-white flex items-center justify-center white">
-                            <HiOutlinePlusCircle color="#f0f0f0" />
+                    <div className="flex">
+                        <div className="w-[130px] h-[64px] border-l border-white flex items-center justify-center white">
+                            <HiPlus color="#f0f0f0" size={25} />
                         </div>
-                        <div className="w-24 h-12 border-l border-white flex items-center justify-center">
-                            <HiOutlinePlusCircle color="#f0f0f0" />
+                        <div className="w-[130px] h-[64px] border-l border-white flex items-center justify-center">
+                            <HiPlus color="#f0f0f0" size={25} />
                         </div>
-                        <div className="w-24 h-12 border-l border-white flex items-center justify-center">
-                            <HiOutlinePlusCircle color="#f0f0f0" />
+                        <div className="w-[130px] h-[64px] border-l border-white flex items-center justify-center">
+                            <HiPlus color="#f0f0f0" size={25} />
                         </div>
-                        <div className="w-24 h-12 border-l border-r border-white flex items-center justify-center white">
-                            <HiOutlinePlusCircle color="#f0f0f0" />
+                        <div className="w-[130px] h-[64px] border-l border-r border-white flex items-center justify-center white">
+                            <HiPlus color="#f0f0f0" size={25} />
                         </div>
                     </div>
 
                     {/* Right Section */}
                     <div className="flex items-center">
-                        <div className="flex flex-col items-end justify-center text-white text-[10px]">
+                        <div className="flex flex-col items-end justify-center text-white text-[13px]">
                             <span>{"Balance: $ 17.854 (AUD)"}</span>
                             <span>{"$ 14.2 (USD)"}</span>
                         </div>
 
-                        <div className="flex items-center justify-center w-8 h-8">
-                            <RiMoneyDollarCircleLine color="#f0f0f0" />
+                        <div className="flex items-center justify-center w-10 h-10">
+                            <RiMoneyDollarCircleLine color="#f0f0f0" size={25} />
                         </div>
-                        <div className="ml-4 flex items-center justify-center w-8 h-8 bg-gray-500 rounded-full">
-                            <CiCalendar color="#f0f0f0" />
+                        <div className="ml-4 flex items-center justify-center w-10 h-10 bg-gray-500 rounded-full">
+                            <CiCalendar color="#f0f0f0" size={25} />
                         </div>
-                        <div className="ml-4 flex items-center justify-center w-8 h-8 bg-gray-500 rounded-full">
-                            <BiBorderAll color="#f0f0f0" />
+                        <div className="ml-4 flex items-center justify-center w-10 h-10 bg-gray-500 rounded-full">
+                            <BiBorderAll color="#f0f0f0" size={25} />
                         </div>
                     </div>
                 </div>
 
-                <div className="bg-gray-900 text-white flex justify-between items-center p-2 h-[20px]">
+                <div className="bg-gray-900 text-white flex justify-between items-center p-2 h-[25px]">
                     {/* Left Section */}
                     <div className="flex items-center">
-                        <span className="px-2 rounded">2/4</span>
-                        <span className="ml-2 text-sm">No Limit Hold'em</span>
+                        <span className="px-2 rounded text-[12px]">2/4</span>
+                        <span className="ml-2 text-[12px]">No Limit Hold'em</span>
                     </div>
 
                     {/* Right Section */}
@@ -209,10 +209,10 @@ function PlayPage() {
                 </div>
             </div>
             {/*//! BODY */}
-            <div className="flex w-full h-[calc(100%-70px)]">
+            <div className="flex w-full h-[calc(100%-90px)]">
                 {/*//! TABLE + FOOTER */}
                 <div
-                    className={`flex-grow flex flex-col justify-between transition-all duration-300`}
+                    className={`flex-grow flex flex-col justify-between transition-all duration-250`}
                     style={{
                         transition: "margin 0.3s ease"
                     }}
@@ -333,9 +333,8 @@ function PlayPage() {
                 </div>
                 {/*//! SIDEBAR */}
                 <div
-                    className={`fixed top-[0px] right-0 h-full bg-custom-header overflow-hidden transition-all duration-300 ease-in-out relative ${
-                        openSidebar ? "w-[300px]" : "w-0"
-                    }`}
+                    className={`fixed top-[0px] right-0 h-full bg-custom-header overflow-hidden transition-all duration-300 ease-in-out relative ${openSidebar ? "w-[300px]" : "w-0"
+                        }`}
                     style={{
                         boxShadow: openSidebar ? "0px 0px 10px rgba(0,0,0,0.5)" : "none"
                     }}

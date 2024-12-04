@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Badge from "../reusable/Badge";
 import ProgressBar from "../reusable/ProgressBar";
 import { usePlayerContext } from "../../../context/usePlayerContext";
 import { PlayerStatus } from "../../../context/types";
-import PlayerCard from "./PlayerCard";
 
 type PlayerProps = {
     left?: string; // Front side image source

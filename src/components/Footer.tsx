@@ -44,7 +44,7 @@ const PokerActionPanel: React.FC = () => {
                         CHECK
                     </button>
                     <button disabled={playerIndex !== 0} className="cursor-pointer bg-[#0c0c0c80] hover:bg-[#0c0c0c] px-4 py-2 rounded-lg w-full border-[1px] border-gray-400" onClick={onRaise}>
-                        {raiseAmount == balance ? "All-IN" : `RAISE ${raiseAmount}`}
+                        {raiseAmount === balance ? "All-IN" : `RAISE ${raiseAmount}`}
                     </button>
                 </div>
 
