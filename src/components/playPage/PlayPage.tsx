@@ -17,7 +17,7 @@ import TurnAnimation from "./TurnAnimation/TurnAnimation";
 import { LuPanelLeftOpen } from "react-icons/lu";
 import { BiBorderAll } from "react-icons/bi";
 import { RiMoneyDollarCircleLine } from "react-icons/ri";
-
+import { LuPanelLeftClose } from "react-icons/lu";
 //* Define the interface for the position object
 interface PositionArray {
     left?: string;
@@ -204,7 +204,7 @@ function PlayPage() {
 
                     {/* Right Section */}
                     <div className="flex items-center">
-                        <span className="text-sm cursor-pointer" onClick={onCloseSideBar}><LuPanelLeftOpen /></span>
+                        <span className="text-sm cursor-pointer" onClick={onCloseSideBar}>{openSidebar ? <LuPanelLeftOpen /> : <LuPanelLeftClose />}</span>
                         <button className="ml-2 px-3 rounded">X</button>
                     </div>
                 </div>
@@ -212,7 +212,10 @@ function PlayPage() {
             {/*//! BODY */}
             <div className="flex w-full h-[calc(100%-70px)]">
                 {/*//! TABLE + FOOTER */}
-                <div className={`flex-grow flex flex-col justify-between transition-all duration-300 ${openSidebar ? "w-[calc(100%-250px)]" : "w-full"}`}>
+                <div className={`flex-grow flex flex-col justify-between transition-all duration-300`}
+                    style={{
+                        transition: "margin 0.3s ease",
+                    }}>
                     {/*//! TABLE */}
                     <div className="flex flex-col align-center justify-center h-[calc(100%-190px)] z-[100]">
                         <div className="zoom-container h-[400px] w-[800px] m-[auto]" style={{ zoom }}>
@@ -325,6 +328,21 @@ function PlayPage() {
                 </div>
                 {/*//! SIDEBAR */}
                 <div
+                    className={`fixed top-[70px] right-0 h-full bg-custom-header overflow-hidden transition-all duration-300 ease-in-out relative ${openSidebar ? "w-[300px]" : "w-0"}`}
+                    style={{
+                        boxShadow: openSidebar ? "0px 0px 10px rgba(0,0,0,0.5)" : "none",
+                    }}
+                >
+                    <div
+                        className={`transition-opacity duration-300 ${openSidebar ? "opacity-100" : "opacity-0"} absolute left-0 top-0`}
+                        style={{
+                            display: openSidebar ? "block" : "none",
+                        }}
+                    >
+                        <PokerLog />
+                    </div>
+                </div>
+                {/* <div
                     className={`transition-all duration-300 ease-in-out bg-custom-header flex flex-col items-center justify-center p-4 ${openSidebar ? "w-[250px] opacity-100" : "w-0 opacity-0"
                         }`}
                     style={{
@@ -332,7 +350,7 @@ function PlayPage() {
                     }}
                 >
                     <PokerLog />
-                </div>
+                </div> */}
             </div>
         </div>
     );
