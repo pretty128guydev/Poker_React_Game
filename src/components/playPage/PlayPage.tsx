@@ -54,10 +54,7 @@ function PlayPage() {
         const positions = playerPositionArray.map(({ left, top }) => ({ left, top }));
 
         // Reorder the positions array starting from `startIndex`
-        const reorderedPositions = [
-            ...positions.slice(startIndex),
-            ...positions.slice(0, startIndex)
-        ];
+        const reorderedPositions = [...positions.slice(startIndex), ...positions.slice(0, startIndex)];
 
         // Reconstruct the array with reordered positions and the same color order
         return reorderedPositions.map((position, index) => ({
@@ -67,13 +64,13 @@ function PlayPage() {
     };
 
     useEffect(() => {
-        const reorderedPlayerArray = reorderPlayerPositions(startIndex)
+        const reorderedPlayerArray = reorderPlayerPositions(startIndex);
         const reorderedDealerArray = [...dealerPositionArray.slice(startIndex), ...dealerPositionArray.slice(0, startIndex)];
         const reorderedChipArray = [...chipPositionArray.slice(startIndex), ...chipPositionArray.slice(0, startIndex)];
-        setPlayerPositionArray(reorderedPlayerArray)
-        setChipPositionArray(reorderedChipArray)
-        setDealerPositionArray(reorderedDealerArray)
-    }, [startIndex])
+        setPlayerPositionArray(reorderedPlayerArray);
+        setChipPositionArray(reorderedChipArray);
+        setDealerPositionArray(reorderedDealerArray);
+    }, [startIndex]);
 
     function threeCardsTable() {
         setTimeout(() => {
@@ -93,7 +90,7 @@ function PlayPage() {
         if (showThreeCards) {
             threeCardsTable();
         }
-    }, [showThreeCards])
+    }, [showThreeCards]);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -145,8 +142,8 @@ function PlayPage() {
     }, [tableSize]);
 
     const onCloseSideBar = () => {
-        setOpenSidebar(!openSidebar)
-    }
+        setOpenSidebar(!openSidebar);
+    };
 
     return (
         <div className="h-screen">
@@ -204,7 +201,9 @@ function PlayPage() {
 
                     {/* Right Section */}
                     <div className="flex items-center">
-                        <span className="text-sm cursor-pointer" onClick={onCloseSideBar}>{openSidebar ? <LuPanelLeftOpen /> : <LuPanelLeftClose />}</span>
+                        <span className="text-sm cursor-pointer" onClick={onCloseSideBar}>
+                            {openSidebar ? <LuPanelLeftOpen /> : <LuPanelLeftClose />}
+                        </span>
                         <button className="ml-2 px-3 rounded">X</button>
                     </div>
                 </div>
@@ -212,10 +211,12 @@ function PlayPage() {
             {/*//! BODY */}
             <div className="flex w-full h-[calc(100%-70px)]">
                 {/*//! TABLE + FOOTER */}
-                <div className={`flex-grow flex flex-col justify-between transition-all duration-300`}
+                <div
+                    className={`flex-grow flex flex-col justify-between transition-all duration-300`}
                     style={{
-                        transition: "margin 0.3s ease",
-                    }}>
+                        transition: "margin 0.3s ease"
+                    }}
+                >
                     {/*//! TABLE */}
                     <div className="flex flex-col align-center justify-center h-[calc(100%-190px)] z-[100]">
                         <div className="zoom-container h-[400px] w-[800px] m-[auto]" style={{ zoom }}>
@@ -242,12 +243,20 @@ function PlayPage() {
                                                         <div className="card animate-fall delay-600">
                                                             <OppositePlayerCards frontSrc={`/cards/QB.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
                                                         </div>
-                                                        {openOneMore ? <div className="card animate-fall delay-600">
-                                                            <OppositePlayerCards frontSrc={`/cards/6B.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
-                                                        </div> : <div className="w-[85px] h-[127px] aspect-square border-[0.5px] border-dashed border-white rounded-[5px]"></div>}
-                                                        {openTwoMore ? <div className="card animate-fall delay-600">
-                                                            <OppositePlayerCards frontSrc={`/cards/8A.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
-                                                        </div> : <div className="w-[85px] h-[127px] aspect-square border-[0.5px] border-dashed border-white rounded-[5px]"></div>}
+                                                        {openOneMore ? (
+                                                            <div className="card animate-fall delay-600">
+                                                                <OppositePlayerCards frontSrc={`/cards/6B.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
+                                                            </div>
+                                                        ) : (
+                                                            <div className="w-[85px] h-[127px] aspect-square border-[0.5px] border-dashed border-white rounded-[5px]"></div>
+                                                        )}
+                                                        {openTwoMore ? (
+                                                            <div className="card animate-fall delay-600">
+                                                                <OppositePlayerCards frontSrc={`/cards/8A.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
+                                                            </div>
+                                                        ) : (
+                                                            <div className="w-[85px] h-[127px] aspect-square border-[0.5px] border-dashed border-white rounded-[5px]"></div>
+                                                        )}
                                                     </>
                                                 )}
                                             </div>
@@ -273,11 +282,7 @@ function PlayPage() {
                                         return (
                                             <div key={index} className="z-[10]">
                                                 {playerData.status === PlayerStatus.SeatOff ? (
-                                                    <VacantPlayer
-                                                        index={index}
-                                                        left={position.left}
-                                                        top={position.top}
-                                                    />
+                                                    <VacantPlayer index={index} left={position.left} top={position.top} />
                                                 ) : index != 0 ? (
                                                     <OppositePlayer
                                                         index={index}
@@ -328,17 +333,14 @@ function PlayPage() {
                 </div>
                 {/*//! SIDEBAR */}
                 <div
-                    className={`fixed top-[0px] right-0 h-full bg-custom-header overflow-hidden transition-all duration-300 ease-in-out relative ${openSidebar ? "w-[300px]" : "w-0"}`}
+                    className={`fixed top-[0px] right-0 h-full bg-custom-header overflow-hidden transition-all duration-300 ease-in-out relative ${
+                        openSidebar ? "w-[300px]" : "w-0"
+                    }`}
                     style={{
-                        boxShadow: openSidebar ? "0px 0px 10px rgba(0,0,0,0.5)" : "none",
+                        boxShadow: openSidebar ? "0px 0px 10px rgba(0,0,0,0.5)" : "none"
                     }}
                 >
-                    <div
-                        className={`transition-opacity duration-300 ${openSidebar ? "opacity-100" : "opacity-0"} absolute left-0 top-0`}
-                        style={{
-                            display: openSidebar ? "block" : "none",
-                        }}
-                    >
+                    <div className={`transition-opacity duration-300 ${openSidebar ? "opacity-100" : "opacity-0"} absolute left-0 top-0`}>
                         <PokerLog />
                     </div>
                 </div>
