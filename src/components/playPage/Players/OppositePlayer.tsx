@@ -57,7 +57,7 @@ const OppositePlayer: React.FC<OppositePlayerProps> = ({ left, top, index, color
             </div>
 
             <div
-                className={`absolute z-50 transition-all duration-1000 ease-in-out transform ${isCardVisible
+                className={`absolute z-1000 transition-all duration-1000 ease-in-out transform ${isCardVisible
                     ? "opacity-100 animate-slide-left-to-right" // Apply slide-left-to-right animation when visible
                     : "opacity-0 animate-slide-top-to-bottom" // Apply slide-top-to-bottom animation when hidden
                     }`}
