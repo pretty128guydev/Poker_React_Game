@@ -1,6 +1,6 @@
 .card {
-    width: 100px;
-    height: 137px;
+    width: 85px;
+    height: 127px;
     perspective: 1000px;
     /* Enables 3D flipping */
     cursor: pointer;

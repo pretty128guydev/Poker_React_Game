@@ -29,5 +29,6 @@ export interface PlayerContextType {
     playerIndex: number;
     openOneMore: boolean;
     openTwoMore: boolean;
+    showThreeCards: boolean
 
 }

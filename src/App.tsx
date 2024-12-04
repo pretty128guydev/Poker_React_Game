@@ -3,7 +3,7 @@ import PlayPage from "./components/playPage/PlayPage";
 
 function App() {
     return (
-        <div className="bg-custom-main">
+        <div className="bg-[#2c3245]">
             <PlayPage />
         </div>
     );

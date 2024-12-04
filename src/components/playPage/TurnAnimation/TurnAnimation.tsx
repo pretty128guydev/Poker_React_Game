@@ -32,7 +32,8 @@ const TurnAnimation: React.FC<TurnAnimationProps> = ({ left, top, index }) => {
             className="absolute mt-[35px] transform -translate-x-1/2 -translate-y-1/2 z-[-1]"
             style={{
                 left: left || "50%",
-                top: top || "50%"
+                top: top || "50%",
+                transition: "top 1s ease, left 1s ease"
             }}
         />
     );

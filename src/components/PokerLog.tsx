@@ -15,14 +15,14 @@ const PokerLog: React.FC = () => {
             player: "Player 2",
             description: "wins main pot (1,600) with (Two pair, nines and fives).",
             winnings: "1,600",
-            cards: ["9D", "5D", "5C", "JS", "9S"]
+            cards: ["9D", "5D", "1D", "JS", "9S"]
         },
         {
             id: "4720731369",
             player: "Player 6",
             description: "wins main pot (1,210) with (Two pair, kings and threes).",
             winnings: "1,210",
-            cards: ["KS", "KC", "3C", "3S", "QH"]
+            cards: ["KS", "KC", "1C", "3S", "QH"]
         }
     ];
 
@@ -41,7 +41,7 @@ const PokerLog: React.FC = () => {
     };
 
     return (
-        <div className="text-white rounded-lg w-full h-full p-4 overflow-y-auto">
+        <div className="text-white rounded-lg w-full h-full p-4 overflow-y-auto scrollbar-hide">
             <div className="mb-4">
                 <p>You're connected to our server.</p>
                 <p>Enjoy your game.</p>

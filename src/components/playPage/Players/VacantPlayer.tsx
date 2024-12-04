@@ -11,10 +11,11 @@ const VacantPlayer: React.FC<VacantPlayerProps> = ({ left, top, index }) => {
     return (
         <div
             key={index}
-            className="absolute flex flex-col justify-center text-gray-600 w-[175px] h-[170px] mt-[40px] transform -translate-x-1/2 -translate-y-1/2"
+            className="absolute flex flex-col justify-center text-gray-600 w-[175px] h-[170px] mt-[40px] transform -translate-x-1/2 -translate-y-1/2 cursor-pointer"
             style={{
                 left: left,
-                top: top
+                top: top,
+                transition: "top 1s ease, left 1s ease"
             }}
         >
             <div className="flex justify-center gap-4 mb-2">

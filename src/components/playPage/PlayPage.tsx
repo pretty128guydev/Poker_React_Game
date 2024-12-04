@@ -14,6 +14,9 @@ import Chip from "./reusable/Chip";
 import { usePlayerContext } from "../../context/usePlayerContext";
 import { PlayerStatus } from "../../context/types";
 import TurnAnimation from "./TurnAnimation/TurnAnimation";
+import { LuPanelLeftOpen } from "react-icons/lu";
+import { BiBorderAll } from "react-icons/bi";
+import { RiMoneyDollarCircleLine } from "react-icons/ri";
 
 //* Define the interface for the position object
 interface PositionArray {
@@ -34,13 +37,43 @@ const calculateZoom = () => {
 
 function PlayPage() {
     const [currentIndex, setCurrentIndex] = useState<number>(1);
+    const [startIndex, setStartIndex] = useState<number>(0);
     const [playerPositionArray, setPlayerPositionArray] = useState<PositionArray[]>([]);
     const [chipPositionArray, setChipPositionArray] = useState<PositionArray[]>([]);
     const [dealerPositionArray, setDealerPositionArray] = useState<PositionArray[]>([]);
     const [zoom, setZoom] = useState(calculateZoom());
+    const [openSidebar, setOpenSidebar] = useState(false);
     const [flipped1, setFlipped1] = useState(false);
     const [flipped2, setFlipped2] = useState(false);
     const [flipped3, setFlipped3] = useState(false);
+    const [isCardVisible, setCardVisible] = useState(-1);
+
+    const reorderPlayerPositions = (startIndex: number) => {
+        // Separate out the color and position data
+        const colors = playerPositionArray.map(item => item.color);
+        const positions = playerPositionArray.map(({ left, top }) => ({ left, top }));
+
+        // Reorder the positions array starting from `startIndex`
+        const reorderedPositions = [
+            ...positions.slice(startIndex),
+            ...positions.slice(0, startIndex)
+        ];
+
+        // Reconstruct the array with reordered positions and the same color order
+        return reorderedPositions.map((position, index) => ({
+            ...position,
+            color: colors[index]
+        }));
+    };
+
+    useEffect(() => {
+        const reorderedPlayerArray = reorderPlayerPositions(startIndex)
+        const reorderedDealerArray = [...dealerPositionArray.slice(startIndex), ...dealerPositionArray.slice(0, startIndex)];
+        const reorderedChipArray = [...chipPositionArray.slice(startIndex), ...chipPositionArray.slice(0, startIndex)];
+        setPlayerPositionArray(reorderedPlayerArray)
+        setChipPositionArray(reorderedChipArray)
+        setDealerPositionArray(reorderedDealerArray)
+    }, [startIndex])
 
     function threeCardsTable() {
         setTimeout(() => {
@@ -54,11 +87,13 @@ function PlayPage() {
         }, 1200);
     }
 
-    useEffect(() => {
-        threeCardsTable();
-    }, []);
+    const { players, dealerIndex, tableSize, openOneMore, openTwoMore, showThreeCards } = usePlayerContext();
 
-    const { players, dealerIndex, tableSize, openOneMore, openTwoMore } = usePlayerContext();
+    useEffect(() => {
+        if (showThreeCards) {
+            threeCardsTable();
+        }
+    }, [showThreeCards])
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -109,44 +144,75 @@ function PlayPage() {
         }
     }, [tableSize]);
 
+    const onCloseSideBar = () => {
+        setOpenSidebar(!openSidebar)
+    }
+
     return (
         <div className="h-screen">
             {/*//! HEADER */}
-            <div className="w-[100vw] h-[70px] bottom-0 bg-gray-800 top-5 text-center z-0 flex items-center justify-between border-b border-gray-400 px-4 z-0">
-                <div className="flex items-center space-x-4">
-                    <div className="flex items-center justify-center w-8 h-8 bg-white rounded-full">
-                        <IoMenuSharp />
+            <div>
+                <div className="w-[100vw] h-[50px] bottom-0 bg-[#404040] top-5 text-center flex items-center justify-between border-b border-gray-400 px-4 z-0">
+                    <div className="flex items-center space-x-4">
+                        <div className="flex items-center justify-center w-8 h-8 bg-white rounded-full border-r border-white">
+                            <IoMenuSharp />
+                        </div>
+                        <span className="text-white text-sm font-medium">LOBBY</span>
                     </div>
-                    {/* <span className="text-white text-sm font-medium"></span> */}
+
+                    {/* Middle Section */}
+                    <div className="flex items-center">
+                        <div className="w-24 h-12 border-l border-white flex items-center justify-center white">
+                            <HiOutlinePlusCircle color="#f0f0f0" />
+                        </div>
+                        <div className="w-24 h-12 border-l border-white flex items-center justify-center">
+                            <HiOutlinePlusCircle color="#f0f0f0" />
+                        </div>
+                        <div className="w-24 h-12 border-l border-white flex items-center justify-center">
+                            <HiOutlinePlusCircle color="#f0f0f0" />
+                        </div>
+                        <div className="w-24 h-12 border-l border-r border-white flex items-center justify-center white">
+                            <HiOutlinePlusCircle color="#f0f0f0" />
+                        </div>
+                    </div>
+
+                    {/* Right Section */}
+                    <div className="flex items-center">
+                        <div className="flex flex-col items-end justify-center text-white text-[10px]">
+                            <span>{"Balance: $ 17.854 (AUD)"}</span>
+                            <span>{"$ 14.2 (USD)"}</span>
+                        </div>
+
+                        <div className="flex items-center justify-center w-8 h-8">
+                            <RiMoneyDollarCircleLine color="#f0f0f0" />
+                        </div>
+                        <div className="ml-4 flex items-center justify-center w-8 h-8 bg-gray-500 rounded-full">
+                            <CiCalendar color="#f0f0f0" />
+                        </div>
+                        <div className="ml-4 flex items-center justify-center w-8 h-8 bg-gray-500 rounded-full">
+                            <BiBorderAll color="#f0f0f0" />
+                        </div>
+                    </div>
                 </div>
 
-                {/* Middle Section */}
-                <div className="flex items-center space-x-4">
-                    <div className="w-24 h-12 border border-gray-600 flex items-center justify-center rounded-md white">
-                        <HiOutlinePlusCircle color="#f0f0f0" />
+                <div className="bg-gray-900 text-white flex justify-between items-center p-2 h-[20px]">
+                    {/* Left Section */}
+                    <div className="flex items-center">
+                        <span className="px-2 rounded">2/4</span>
+                        <span className="ml-2 text-sm">No Limit Hold'em</span>
                     </div>
-                    <div className="w-24 h-12 border border-gray-600 flex items-center justify-center rounded-md">
-                        <HiOutlinePlusCircle color="#f0f0f0" />
-                    </div>
-                    <div className="w-24 h-12 border border-gray-600 flex items-center justify-center rounded-md">
-                        <HiOutlinePlusCircle color="#f0f0f0" />
-                    </div>
-                    <div className="w-24 h-12 border border-gray-600 flex items-center justify-center rounded-md white">
-                        <HiOutlinePlusCircle color="#f0f0f0" />
-                    </div>
-                </div>
 
-                {/* Right Section */}
-                <div className="flex items-center">
-                    <div className="flex items-center justify-center w-8 h-8 bg-gray-700 rounded-full">
-                        <CiCalendar color="#f0f0f0" />
+                    {/* Right Section */}
+                    <div className="flex items-center">
+                        <span className="text-sm cursor-pointer" onClick={onCloseSideBar}><LuPanelLeftOpen /></span>
+                        <button className="ml-2 px-3 rounded">X</button>
                     </div>
                 </div>
             </div>
             {/*//! BODY */}
             <div className="flex w-full h-[calc(100%-70px)]">
                 {/*//! TABLE + FOOTER */}
-                <div className="h-full flex flex-col justify-between w-[calc(100%-250px)]">
+                <div className={`flex-grow flex flex-col justify-between transition-all duration-300 ${openSidebar ? "w-[calc(100%-250px)]" : "w-full"}`}>
                     {/*//! TABLE */}
                     <div className="flex flex-col align-center justify-center h-[calc(100%-190px)]">
                         <div className="zoom-container h-[400px] w-[800px] m-[auto]" style={{ zoom }}>
@@ -162,21 +228,25 @@ function PlayPage() {
                                                 <span className="text-[#dbd3d3] mr-2">Main Pot: 50</span>
                                             </div>
                                             <div className="flex gap-2 mt-8">
-                                                <div className="card animate-fall delay-200">
-                                                    <OppositePlayerCards frontSrc={`/cards/10B.svg`} backSrc="/cards/back.svg" flipped={flipped1} />
-                                                </div>
-                                                <div className="card animate-fall delay-400">
-                                                    <OppositePlayerCards frontSrc={`/cards/JD.svg`} backSrc="/cards/back.svg" flipped={flipped2} />
-                                                </div>
-                                                <div className="card animate-fall delay-600">
-                                                    <OppositePlayerCards frontSrc={`/cards/8B.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
-                                                </div>
-                                                {openOneMore ? <div className="card animate-fall delay-600">
-                                                    <OppositePlayerCards frontSrc={`/cards/6B.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
-                                                </div> : <div className="w-[100px] h-[137px] aspect-square border-[0.5px] border-dashed border-white rounded-[5px]"></div>}
-                                                {openTwoMore ? <div className="card animate-fall delay-600">
-                                                    <OppositePlayerCards frontSrc={`/cards/8A.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
-                                                </div> : <div className="w-[100px] h-[137px] aspect-square border-[0.5px] border-dashed border-white rounded-[5px]"></div>}
+                                                {showThreeCards && (
+                                                    <>
+                                                        <div className="card animate-fall delay-200">
+                                                            <OppositePlayerCards frontSrc={`/cards/6D.svg`} backSrc="/cards/back.svg" flipped={flipped1} />
+                                                        </div>
+                                                        <div className="card animate-fall delay-400">
+                                                            <OppositePlayerCards frontSrc={`/cards/JA.svg`} backSrc="/cards/back.svg" flipped={flipped2} />
+                                                        </div>
+                                                        <div className="card animate-fall delay-600">
+                                                            <OppositePlayerCards frontSrc={`/cards/QB.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
+                                                        </div>
+                                                        {openOneMore ? <div className="card animate-fall delay-600">
+                                                            <OppositePlayerCards frontSrc={`/cards/6B.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
+                                                        </div> : <div className="w-[85px] h-[127px] aspect-square border-[0.5px] border-dashed border-white rounded-[5px]"></div>}
+                                                        {openTwoMore ? <div className="card animate-fall delay-600">
+                                                            <OppositePlayerCards frontSrc={`/cards/8A.svg`} backSrc="/cards/back.svg" flipped={flipped3} />
+                                                        </div> : <div className="w-[85px] h-[127px] aspect-square border-[0.5px] border-dashed border-white rounded-[5px]"></div>}
+                                                    </>
+                                                )}
                                             </div>
                                             {/*//! CHIP */}
                                             {chipPositionArray.map((position, index) => {
@@ -209,10 +279,13 @@ function PlayPage() {
                                                     <OppositePlayer
                                                         index={index}
                                                         currentIndex={currentIndex}
+                                                        setStartIndex={(index: number) => setStartIndex(index)}
                                                         left={position.left}
                                                         top={position.top}
                                                         color={position.color}
                                                         status={players[index]?.status}
+                                                        isCardVisible={isCardVisible}
+                                                        setCardVisible={setCardVisible}
                                                     />
                                                 ) : (
                                                     <Player
@@ -251,7 +324,13 @@ function PlayPage() {
                     </div>
                 </div>
                 {/*//! SIDEBAR */}
-                <div className="w-[250px] h-full flex bg-custom-header flex-col items-center justify-center p-4">
+                <div
+                    className={`transition-all duration-300 ease-in-out bg-custom-header flex flex-col items-center justify-center p-4 ${openSidebar ? "w-[250px] opacity-100" : "w-0 opacity-0"
+                        }`}
+                    style={{
+                        overflow: openSidebar ? "visible" : "hidden", // Prevents content from spilling when hidden
+                    }}
+                >
                     <PokerLog />
                 </div>
             </div>

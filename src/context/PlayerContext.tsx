@@ -16,6 +16,7 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     const [lastPot, setLastPot] = useState<number>(0);
     const [openOneMore, setOpenOneMore] = useState<boolean>(false);
     const [openTwoMore, setOpenTwoMore] = useState<boolean>(false);
+    const [showThreeCards, setShowThreeCards] = useState<boolean>(false);
     const [tableSize, setTableSize] = useState<number>(9);
     const [playerIndex, setPlayerIndex] = useState<number>(-1);
     const [dealerIndex, setDealerIndex] = useState<number>(0);
@@ -107,10 +108,14 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         const checkPot = lastPot - updatedPlayers[playerIndex].pot;
         console.log(`POT, LASTPOT`, updatedPlayers[playerIndex].pot, lastPot)
         if (updatedPlayers[playerIndex].pot == lastPot) {
-            if (openOneMore) {
-                setOpenTwoMore(true)
+            if (showThreeCards) {
+                if (openOneMore) {
+                    setOpenTwoMore(true)
+                } else {
+                    setOpenOneMore(true);
+                }
             } else {
-                setOpenOneMore(true);
+                setShowThreeCards(true)
             }
         }
         if (updatedPlayers[playerIndex].balance <= checkPot) {
@@ -260,9 +265,10 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             dealerIndex,
             openOneMore,
             openTwoMore,
+            showThreeCards,
             setPlayerAction
         }),
-        [players, tableSize, playerIndex, dealerIndex, openOneMore, openTwoMore, lastPot, fold, raise, check, setPlayerAction]
+        [players, tableSize, playerIndex, dealerIndex, openOneMore, openTwoMore, showThreeCards, lastPot, fold, raise, check, setPlayerAction]
     );
 
     return <PlayerContext.Provider value={contextValue}>{children}</PlayerContext.Provider>;

@@ -3,6 +3,7 @@ import Badge from "../reusable/Badge";
 import ProgressBar from "../reusable/ProgressBar";
 import { usePlayerContext } from "../../../context/usePlayerContext";
 import { PlayerStatus } from "../../../context/types";
+import PlayerCard from "./PlayerCard";
 
 type PlayerProps = {
     left?: string; // Front side image source
@@ -20,10 +21,11 @@ const Player: React.FC<PlayerProps> = ({ left, top, index, color }) => {
         <div
             key={index}
             className={`${players[index].status && players[index].status === PlayerStatus.Fold ? "opacity-60" : ""
-                } absolute flex flex-col justify-center text-gray-600 w-[150px] h-[140px] mt-[40px] transform -translate-x-1/2 -translate-y-1/2`}
+                } absolute flex flex-col justify-center text-gray-600 w-[150px] h-[140px] mt-[40px] transform -translate-x-1/2 -translate-y-1/2 cursor-pointer`}
             style={{
                 left: left,
-                top: top
+                top: top,
+                transition: "top 1s ease, left 1s ease"
             }}
         >
             <div className="flex justify-center gap-1">
