@@ -107,20 +107,17 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         const checkPot = lastPot - updatedPlayers[playerIndex].pot;
         console.log(`POT, LASTPOT`, updatedPlayers[playerIndex].pot, lastPot);
         if (updatedPlayers[playerIndex].pot == lastPot) {
-<<<<<<< HEAD
+
             if (showThreeCards) {
                 if (openOneMore) {
                     setOpenTwoMore(true)
                 } else {
                     setOpenOneMore(true);
                 }
-=======
-            if (openOneMore) {
-                setOpenTwoMore(true);
->>>>>>> 715f59c66c9bfc0b6fd4366e7c4facbe1942a3ee
             } else {
                 setShowThreeCards(true)
             }
+
         }
         if (updatedPlayers[playerIndex].balance <= checkPot) {
             updatedPlayers[playerIndex].status = PlayerStatus.AllIn;

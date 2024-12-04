@@ -214,12 +214,12 @@ function PlayPage() {
                 {/*//! TABLE + FOOTER */}
                 <div className={`flex-grow flex flex-col justify-between transition-all duration-300 ${openSidebar ? "w-[calc(100%-250px)]" : "w-full"}`}>
                     {/*//! TABLE */}
-                    <div className="flex flex-col align-center justify-center h-[calc(100%-190px)]">
+                    <div className="flex flex-col align-center justify-center h-[calc(100%-190px)] z-[100]">
                         <div className="zoom-container h-[400px] w-[800px] m-[auto]" style={{ zoom }}>
                             <div className="flex-grow scrollbar-none bg-custom-table h-full flex flex-col justify-center items-center relative z-0">
                                 <div className="w-[800px] h-[400px] relative text-center block z-[-2] transform translate-y-[30px]">
                                     <div className="h-full flex align-center justify-center">
-                                        <div className="relative flex flex-col absolute w-[800px] h-[300px] left-1/2 top-5 transform -translate-x-1/2 text-center z-0 border-[2px] border-[#c9c9c985] rounded-full flex items-center justify-center shadow-[0_7px_13px_rgba(0,0,0,0.3)]">
+                                        <div className="z-[20] relative flex flex-col absolute w-[800px] h-[300px] left-1/2 top-5 transform -translate-x-1/2 text-center z-0 border-[2px] border-[#c9c9c985] rounded-full flex items-center justify-center shadow-[0_7px_13px_rgba(0,0,0,0.3)]">
                                             {/* //! Table */}
                                             <div className="w-[140px] h-[25px] rounded-full bg-[#00000054] flex align-center justify-center">
                                                 <span className="text-[#dbd3d3] mr-2">Total Pot: 50</span>
@@ -268,7 +268,7 @@ function PlayPage() {
                                     {playerPositionArray.map((position, index) => {
                                         const playerData = players[index];
                                         return (
-                                            <div key={index}>
+                                            <div key={index} className="z-[10]">
                                                 {playerData.status === PlayerStatus.SeatOff ? (
                                                     <VacantPlayer
                                                         index={index}
@@ -319,7 +319,7 @@ function PlayPage() {
                         </div>
                     </div>
                     {/*//! FOOTER */}
-                    <div className="mb-[0] w-full h-[190px] bottom-0 bg-custom-footer top-5 text-center z-0 flex justify-center">
+                    <div className="mb-[0] w-full h-[190px] bottom-0 bg-custom-footer top-5 text-center z-[0] flex justify-center">
                         <PokerActionPanel />
                     </div>
                 </div>

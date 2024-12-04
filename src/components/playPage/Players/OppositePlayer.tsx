@@ -24,7 +24,7 @@ const OppositePlayer: React.FC<OppositePlayerProps> = ({ left, top, index, color
             <div
                 key={index}
                 className={`${players[index].status && players[index].status === PlayerStatus.Fold ? "opacity-60" : ""
-                    }  absolute flex flex-col justify-center text-gray-600 w-[150px] h-[140px] mt-[40px] transform -translate-x-1/2 -translate-y-1/2 cursor-pointer`}
+                    }  absolute flex flex-col justify-center text-gray-600 w-[150px] h-[140px] mt-[40px] transform -translate-x-1/2 -translate-y-1/2 cursor-pointer z-[10]`}
                 style={{
                     left: left,
                     top: top,
@@ -57,7 +57,7 @@ const OppositePlayer: React.FC<OppositePlayerProps> = ({ left, top, index, color
             </div>
 
             <div
-                className={`absolute z-1000 transition-all duration-1000 ease-in-out transform ${isCardVisible
+                className={`absolute  z-[1000] transition-all duration-1000 ease-in-out transform ${isCardVisible
                     ? "opacity-100 animate-slide-left-to-right" // Apply slide-left-to-right animation when visible
                     : "opacity-0 animate-slide-top-to-bottom" // Apply slide-top-to-bottom animation when hidden
                     }`}

@@ -48,6 +48,7 @@ const PokerActionPanel: React.FC = () => {
                     </button>
                 </div>
 
+
                 {/* Slider and Controls */}
                 <div className="flex items-center space-x-4">
                     <button

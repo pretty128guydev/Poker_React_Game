@@ -24,7 +24,7 @@ const ChipPurchase: React.FC = () => {
     };
 
     return (
-        <div className="absolute bottom-3 left-3">
+        <div className="absolute bottom-3 left-3 z-[0]">
             <div className="relative w-44">
                 {/* Buy Chips Button */}
                 <button
