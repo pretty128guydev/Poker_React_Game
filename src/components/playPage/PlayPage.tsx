@@ -48,23 +48,23 @@ function PlayPage() {
     const [flipped3, setFlipped3] = useState(false);
     const [isCardVisible, setCardVisible] = useState(-1);
 
-    const reorderPlayerPositions = (startIndex: number) => {
-        // Separate out the color and position data
-        const colors = playerPositionArray.map(item => item.color);
-        const positions = playerPositionArray.map(({ left, top }) => ({ left, top }));
+    // const reorderPlayerPositions = (startIndex: number) => {
+    //     // Separate out the color and position data
+    //     const colors = playerPositionArray.map(item => item.color);
+    //     const positions = playerPositionArray.map(({ left, top }) => ({ left, top }));
 
-        // Reorder the positions array starting from `startIndex`
-        const reorderedPositions = [...positions.slice(startIndex), ...positions.slice(0, startIndex)];
+    //     // Reorder the positions array starting from `startIndex`
+    //     const reorderedPositions = [...positions.slice(startIndex), ...positions.slice(0, startIndex)];
 
-        // Reconstruct the array with reordered positions and the same color order
-        return reorderedPositions.map((position, index) => ({
-            ...position,
-            color: colors[index]
-        }));
-    };
+    //     // Reconstruct the array with reordered positions and the same color order
+    //     return reorderedPositions.map((position, index) => ({
+    //         ...position,
+    //         color: colors[index]
+    //     }));
+    // };
 
     useEffect(() => {
-        const reorderedPlayerArray = reorderPlayerPositions(startIndex);
+        const reorderedPlayerArray = [...playerPositionArray.slice(startIndex), ...playerPositionArray.slice(0, startIndex)];
         const reorderedDealerArray = [...dealerPositionArray.slice(startIndex), ...dealerPositionArray.slice(0, startIndex)];
         const reorderedChipArray = [...chipPositionArray.slice(startIndex), ...chipPositionArray.slice(0, startIndex)];
         setPlayerPositionArray(reorderedPlayerArray);
@@ -150,7 +150,7 @@ function PlayPage() {
             {/*//! HEADER */}
             <div>
                 <div className="w-[100vw] h-[65px] bottom-0 bg-[#404040] top-5 text-center flex items-center justify-between border-gray-400 px-4 z-0">
-                    <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-2">
                         <div className="flex items-center justify-center w-10 h-10 bg-white rounded-full border-r border-white">
                             <IoMenuSharp size={20} />
                         </div>
@@ -176,17 +176,16 @@ function PlayPage() {
                     {/* Right Section */}
                     <div className="flex items-center">
                         <div className="flex flex-col items-end justify-center text-white text-[13px]">
-                            <span>{"Balance: $ 17.854 (AUD)"}</span>
-                            <span>{"$ 14.2 (USD)"}</span>
+                            <span>{"Balance: $ 14.2 (USD)"}</span>
                         </div>
 
                         <div className="flex items-center justify-center w-10 h-10">
                             <RiMoneyDollarCircleLine color="#f0f0f0" size={25} />
                         </div>
-                        <div className="ml-4 flex items-center justify-center w-10 h-10 bg-gray-500 rounded-full">
+                        <div className="ml-2 flex items-center justify-center w-10 h-10 bg-gray-500 rounded-full">
                             <CiCalendar color="#f0f0f0" size={25} />
                         </div>
-                        <div className="ml-4 flex items-center justify-center w-10 h-10 bg-gray-500 rounded-full">
+                        <div className="ml-2 flex items-center justify-center w-10 h-10 bg-gray-500 rounded-full">
                             <BiBorderAll color="#f0f0f0" size={25} />
                         </div>
                     </div>
@@ -283,7 +282,7 @@ function PlayPage() {
                                             <div key={index} className="z-[10]">
                                                 {playerData.status === PlayerStatus.SeatOff ? (
                                                     <VacantPlayer index={index} left={position.left} top={position.top} />
-                                                ) : index != 0 ? (
+                                                ) : index !== 0 ? (
                                                     <OppositePlayer
                                                         index={index}
                                                         currentIndex={currentIndex}
@@ -324,6 +323,9 @@ function PlayPage() {
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div className="flex justify-end mr-3 mb-1">
+                            <span className="text-white bg-[#0c0c0c80] rounded-full px-2">High Card, Jack</span>
                         </div>
                     </div>
                     {/*//! FOOTER */}

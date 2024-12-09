@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Badge from "../reusable/Badge";
 import ProgressBar from "../reusable/ProgressBar";
 import { usePlayerContext } from "../../../context/usePlayerContext";
@@ -33,8 +33,8 @@ const OppositePlayer: React.FC<OppositePlayerProps> = ({ left, top, index, color
                 onClick={() => setCardVisible(index)}
             >
                 <div className="flex justify-center gap-1">
-                    <img src={`/cards/Back.svg`} className="w-[35%] h-[auto]" />
-                    <img src={`/cards/Back.svg`} className="w-[35%] h-[auto]" />
+                    <img src={`/cards/Back.svg`} alt="Opposite Player Card" className="w-[35%] h-[auto]" />
+                    <img src={`/cards/Back.svg`} alt="Opposite Player Card" className="w-[35%] h-[auto]" />
                 </div>
                 <div className="relative flex flex-col justify-end mt-[-6px] mx-1">
                     <div

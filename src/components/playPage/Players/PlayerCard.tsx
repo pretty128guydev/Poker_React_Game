@@ -30,7 +30,7 @@ const PlayerCard: React.FC<PlayerCardProps> = ({ id, label, left, top, color, on
                 </div>
                 <button
                     onClick={onClose}
-                    className="text-xl text-gray-700 hover:text-red-500 transition"
+                    className="text-xl text-gray-700 hover:text-red-500 transition mr-2"
                 >
                     ✕
                 </button>
@@ -45,7 +45,7 @@ const PlayerCard: React.FC<PlayerCardProps> = ({ id, label, left, top, color, on
                     placeholder="Enter note"
                     value={note}
                     onChange={handleNoteChange}
-                    className="w-full h-[70px] mb-4 text-gray-700 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-teal-400"
+                    className="w-full h-[70px] mb-4 text-gray-700 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-teal-400 p-4"
                 />
 
                 {/* Icons Section */}
